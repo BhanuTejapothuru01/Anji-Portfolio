@@ -2,13 +2,8 @@
   'use strict';
 
   var config = window.RAM_EDITZ_CONFIG || {};
+  var escapeHtml = config.escapeHtml;
   var isTouch = window.matchMedia('(hover: none), (pointer: coarse)').matches;
-
-  function escapeHtml(str) {
-    var div = document.createElement('div');
-    div.textContent = str || '';
-    return div.innerHTML;
-  }
 
   function applySiteBranding() {
     var headerLines = document.querySelectorAll('.header .logo .logo-line');

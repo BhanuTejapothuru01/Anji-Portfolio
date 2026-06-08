@@ -5,11 +5,8 @@
 (function () {
   'use strict';
 
-  function escapeHtml(str) {
-    var div = document.createElement('div');
-    div.textContent = str || '';
-    return div.innerHTML;
-  }
+  var config = window.RAM_EDITZ_CONFIG || {};
+  var escapeHtml = config.escapeHtml;
 
   function getYouTubeId(url) {
     if (!url) return null;
@@ -259,7 +256,7 @@
 
     initFeaturedTimecode();
 
-    if (!grid) return videos;
+    if (!grid) return;
 
     if (videos.length === 0) {
       grid.innerHTML = buildEmptyState();
@@ -268,8 +265,6 @@
     }
 
     initBackgroundVideos();
-
-    return videos;
   }
 
   function initBackgroundVideos() {
@@ -375,8 +370,7 @@
   }
 
   function openModal(url, title, modalEls) {
-    if (!modalEls || !modalEls.modal) return false;
-    if (!url) return false;
+    if (!modalEls || !modalEls.modal || !url) return;
 
     modalEls.titleEl.textContent = title || 'Video';
     modalEls.playerEl.innerHTML = '';
@@ -415,8 +409,6 @@
 
     var closeBtn = modalEls.modal.querySelector('.video-modal-close');
     if (closeBtn) closeBtn.focus();
-
-    return true;
   }
 
   function closeModal(modalEls) {

@@ -21,10 +21,8 @@ var config = {
     'Brand Reels',
     'Product Films',
     'Social Content',
-    'UGC Videos',
+    'Typograpghy Animations',
     'Commercials',
-    'Music Videos',
-    'Documentaries',
     'Live Events',
     'Testimonials',
     'Showreels'
@@ -32,23 +30,29 @@ var config = {
   testimonials: [
     {
       quote: 'Ram editz transformed our brand story into a cinematic experience. The engagement on our campaign tripled within the first week.',
-      author: 'Sarah Chen',
-      role: 'CMO, TechFlow',
+      author: 'Priya Reddy',
+      role: 'CMO, TechVista India',
       rating: 5
     },
     {
       quote: 'Every frame feels intentional. They understood our vision before we could fully articulate it — true creative partners.',
-      author: 'Marcus Webb',
-      role: 'Founder, Eclipse Records',
+      author: 'Karthik Menon',
+      role: 'Founder, Pulse Studios',
       rating: 5
     },
     {
       quote: 'From concept to delivery, the process was seamless. The final reel exceeded every expectation we had.',
-      author: 'Elena Rodriguez',
-      role: 'Brand Director, Nike',
+      author: 'Ananya Sharma',
+      role: 'Brand Director, Aarva Lifestyle',
       rating: 5
     }
   ]
+};
+
+config.escapeHtml = function (str) {
+  var div = document.createElement('div');
+  div.textContent = str || '';
+  return div.innerHTML;
 };
 
 window.RAM_EDITZ_CONFIG = config;
