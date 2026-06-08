@@ -1,0 +1,249 @@
+/* ============================================
+   Ram editz — Background Animations
+   ============================================ */
+
+/* Animated gradient mesh */
+.bg-mesh {
+  position: absolute;
+  inset: -20%;
+  pointer-events: none;
+}
+
+.bg-mesh-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.35;
+}
+
+.bg-mesh-blob-1 {
+  width: 55vw;
+  height: 55vw;
+  max-width: 680px;
+  max-height: 680px;
+  top: -8%;
+  left: -12%;
+  background: radial-gradient(circle, rgba(255, 140, 66, 0.45) 0%, transparent 70%);
+  animation: meshDrift1 22s ease-in-out infinite;
+}
+
+.bg-mesh-blob-2 {
+  width: 45vw;
+  height: 45vw;
+  max-width: 560px;
+  max-height: 560px;
+  bottom: -5%;
+  right: -10%;
+  background: radial-gradient(circle, rgba(77, 208, 225, 0.28) 0%, transparent 70%);
+  animation: meshDrift2 28s ease-in-out infinite;
+}
+
+.bg-mesh-blob-3 {
+  width: 35vw;
+  height: 35vw;
+  max-width: 420px;
+  max-height: 420px;
+  top: 40%;
+  left: 35%;
+  background: radial-gradient(circle, rgba(255, 107, 26, 0.2) 0%, transparent 70%);
+  animation: meshDrift3 18s ease-in-out infinite;
+}
+
+@keyframes meshDrift1 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(8vw, 6vh) scale(1.08); }
+  66% { transform: translate(-4vw, 10vh) scale(0.94); }
+}
+
+@keyframes meshDrift2 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  40% { transform: translate(-10vw, -8vh) scale(1.1); }
+  70% { transform: translate(6vw, -4vh) scale(0.92); }
+}
+
+@keyframes meshDrift3 {
+  0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.35; }
+  50% { transform: translate(-12vw, 8vh) scale(1.15); opacity: 0.5; }
+}
+
+/* Cinematic light leaks */
+.bg-light-leak {
+  position: absolute;
+  pointer-events: none;
+  filter: blur(40px);
+  opacity: 0;
+  mix-blend-mode: screen;
+}
+
+.bg-light-leak-1 {
+  width: 280px;
+  height: 480px;
+  top: 15%;
+  right: -60px;
+  background: linear-gradient(180deg, transparent, rgba(255, 140, 66, 0.35), transparent);
+  transform: rotate(18deg);
+  animation: lightLeakSweep1 12s ease-in-out infinite;
+}
+
+.bg-light-leak-2 {
+  width: 220px;
+  height: 400px;
+  bottom: 20%;
+  left: -40px;
+  background: linear-gradient(180deg, transparent, rgba(77, 208, 225, 0.22), transparent);
+  transform: rotate(-14deg);
+  animation: lightLeakSweep2 16s ease-in-out infinite;
+}
+
+@keyframes lightLeakSweep1 {
+  0%, 100% { opacity: 0; transform: rotate(18deg) translateY(-30px); }
+  45%, 55% { opacity: 0.7; transform: rotate(18deg) translateY(40px); }
+}
+
+@keyframes lightLeakSweep2 {
+  0%, 100% { opacity: 0; transform: rotate(-14deg) translateY(30px); }
+  40%, 60% { opacity: 0.55; transform: rotate(-14deg) translateY(-50px); }
+}
+
+/* Subtle film grid */
+.bg-grid {
+  position: absolute;
+  inset: 0;
+  opacity: 0.04;
+  background-image:
+    linear-gradient(rgba(255, 179, 128, 0.5) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 179, 128, 0.5) 1px, transparent 1px);
+  background-size: 80px 80px;
+  mask-image: radial-gradient(ellipse at center, black 20%, transparent 75%);
+  -webkit-mask-image: radial-gradient(ellipse at center, black 20%, transparent 75%);
+  animation: gridPulse 8s ease-in-out infinite;
+}
+
+@keyframes gridPulse {
+  0%, 100% { opacity: 0.03; }
+  50% { opacity: 0.06; }
+}
+
+/* Floating dust particles */
+.bg-particles {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.bg-particle {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.6);
+  box-shadow: 0 0 6px rgba(255, 179, 128, 0.4);
+  opacity: 0;
+  animation: particleFloat linear infinite;
+}
+
+@keyframes particleFloat {
+  0% {
+    opacity: 0;
+    transform: translateY(0) translateX(0) scale(0.5);
+  }
+  10% { opacity: var(--particle-opacity, 0.4); }
+  90% { opacity: var(--particle-opacity, 0.4); }
+  100% {
+    opacity: 0;
+    transform: translateY(-100vh) translateX(var(--particle-drift, 20px)) scale(1);
+  }
+}
+
+/* Aurora band */
+.bg-aurora {
+  position: absolute;
+  width: 120%;
+  height: 40%;
+  left: -10%;
+  top: 25%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 140, 66, 0.06) 25%,
+    rgba(77, 208, 225, 0.05) 50%,
+    rgba(255, 140, 66, 0.06) 75%,
+    transparent 100%
+  );
+  filter: blur(60px);
+  opacity: 0.7;
+  animation: auroraShift 20s ease-in-out infinite;
+}
+
+@keyframes auroraShift {
+  0%, 100% { transform: translateX(-5%) skewY(-2deg); opacity: 0.5; }
+  50% { transform: translateX(5%) skewY(2deg); opacity: 0.85; }
+}
+
+/* Extra bokeh orbs */
+.bokeh-6 {
+  width: 140px;
+  height: 140px;
+  background: var(--orange-glow);
+  top: 75%;
+  left: 8%;
+  opacity: 0.25;
+  animation-delay: -5s;
+}
+
+.bokeh-7 {
+  width: 90px;
+  height: 90px;
+  background: var(--teal);
+  top: 8%;
+  right: 28%;
+  opacity: 0.18;
+  animation-delay: -7s;
+}
+
+/* Fallback float when JS motion is off */
+.bokeh {
+  animation: float 14s ease-in-out infinite;
+}
+
+body.motion-active .bg-mesh-blob {
+  animation: none;
+}
+
+/* Static grain — animated grain caused repaint lag */
+.grain-overlay {
+  animation: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bg-mesh-blob,
+  .bg-light-leak,
+  .bg-grid,
+  .bg-particle,
+  .bg-aurora,
+  .bokeh,
+  .grain-overlay {
+    animation: none !important;
+  }
+}
+
+/* Lite mode — fewer GPU-heavy layers */
+html.perf-lite .bg-light-leak,
+html.perf-lite .bg-particle,
+html.perf-lite .bokeh-6,
+html.perf-lite .bokeh-7 {
+  display: none !important;
+}
+
+html.perf-lite .grain-overlay {
+  opacity: 0.02;
+}
+
+html.perf-lite .bg-aurora {
+  animation: none;
+  opacity: 0.35;
+}
+
+html.perf-lite .hero-visual-glow,
+html.perf-lite .hero-frame-ring,
+html.perf-lite .hero-float-card {
+  animation: none !important;
+}

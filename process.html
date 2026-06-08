@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="description" content="Ram editz Process — Discovery, pre-production, production, and post-production for cinematic video.">
+  <meta name="theme-color" content="#0a0a0c">
+  <title>Process — Ram editz</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎬</text></svg>">
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/premium.css">
+  <link rel="stylesheet" href="css/background-animations.css">
+  <link rel="stylesheet" href="css/loader.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body data-page="process" class="is-loading">
+
+  <div class="grain-overlay" aria-hidden="true"></div>
+
+  <div class="page-loader" id="pageLoader"></div>
+
+  <div class="bg-effects" aria-hidden="true">
+    <div class="bokeh bokeh-1"></div>
+    <div class="bokeh bokeh-2"></div>
+    <div class="bokeh bokeh-3"></div>
+    <div class="bokeh bokeh-4"></div>
+    <div class="bokeh bokeh-5"></div>
+    <div class="glass-corner glass-corner-tl"></div>
+    <div class="glass-corner glass-corner-br"></div>
+  </div>
+
+  <header class="header">
+    <a href="index.html" class="logo">
+      <span class="logo-line">Ram</span>
+      <span class="logo-line">editz</span>
+    </a>
+    <a href="contact.html" class="header-cta">Start a Project</a>
+    <button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </header>
+
+  <nav class="nav-overlay" id="navOverlay" aria-hidden="true">
+    <div class="nav-overlay-bg">
+      <svg class="nav-reel-wireframe" viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="200" cy="200" r="120" stroke="rgba(255,255,255,0.08)" stroke-width="2"/>
+        <circle cx="200" cy="200" r="90" stroke="rgba(255,255,255,0.06)" stroke-width="1.5"/>
+        <circle cx="200" cy="200" r="60" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+        <circle cx="200" cy="200" r="25" stroke="rgba(255,255,255,0.1)" stroke-width="1.5"/>
+        <line x1="200" y1="80" x2="200" y2="320" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+        <line x1="80" y1="200" x2="320" y2="200" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+        <rect x="140" y="140" width="120" height="120" rx="8" stroke="rgba(255,255,255,0.06)" stroke-width="1" transform="rotate(45 200 200)"/>
+        <path d="M200 80 Q280 120 320 200 Q280 280 200 320 Q120 280 80 200 Q120 120 200 80" stroke="rgba(255,140,66,0.15)" stroke-width="1" fill="none"/>
+      </svg>
+    </div>
+    <button class="nav-close" id="navClose" aria-label="Close menu">&times;</button>
+    <ul class="nav-links">
+      <li><a href="index.html" class="nav-link" data-page="home">HOME</a></li>
+      <li><a href="portfolio.html" class="nav-link" data-page="portfolio">PORTFOLIO</a></li>
+      <li><a href="services.html" class="nav-link" data-page="services">SERVICES</a></li>
+      <li><a href="process.html" class="nav-link" data-page="process">PROCESS</a></li>
+      <li><a href="contact.html" class="nav-link" data-page="contact">CONTACT</a></li>
+    </ul>
+    <footer class="nav-footer"></footer>
+  </nav>
+
+  <main>
+    <div class="page-hero reveal">
+      <p class="page-hero-label">How we work</p>
+      <h1 class="page-hero-title">PROCESS</h1>
+      <p class="page-hero-desc">A proven four-stage workflow that takes your idea from concept to cinematic delivery.</p>
+      <div class="page-hero-line"></div>
+    </div>
+    <section class="section section-process page-section">
+      <div class="process-container">
+        <div class="process-steps">
+          <div class="process-step reveal tilt-card">
+            <span class="process-num">01</span>
+            <h3>Discovery</h3>
+            <p>We dive deep into your brand, goals, and audience to craft the perfect creative direction.</p>
+          </div>
+          <div class="process-step reveal tilt-card">
+            <span class="process-num">02</span>
+            <h3>Pre-Production</h3>
+            <p>Storyboarding, scripting, and planning every shot to ensure a seamless production day.</p>
+          </div>
+          <div class="process-step reveal tilt-card">
+            <span class="process-num">03</span>
+            <h3>Production</h3>
+            <p>Cinematic filming with professional crew, gear, and creative direction on set.</p>
+          </div>
+          <div class="process-step reveal tilt-card">
+            <span class="process-num">04</span>
+            <h3>Post & Delivery</h3>
+            <p>Expert editing, color grading, sound design, and delivery in all formats you need.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-block" style="padding-bottom:80px">
+      <div class="cta-band reveal">
+        <div class="cta-band-content">
+          <h2>Ready to start your project?</h2>
+          <p>From first call to final delivery — we'll guide you through every step of the process.</p>
+          <div class="cta-band-actions">
+            <a href="contact.html" class="btn btn-primary">Start a Project</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div id="footerMount"></div>
+
+  <script src="js/config.js"></script>
+  <script src="js/loader.js"></script>
+  <script src="js/feedback.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/premium.js"></script>
+  <script src="js/background-effects.js"></script>
+  <script src="js/movable-animations.js"></script>
+</body>
+</html>

@@ -1,0 +1,40 @@
+.vercel
+
+# Adobe Creative Cloud — project & source files
+*.psd
+*.ai
+*.indd
+*.aep
+*.aepx
+*.prproj
+*.mogrt
+*.mogrts
+
+# Adobe auto-save folders
+Adobe After Effects Auto-Save/
+Adobe Premiere Pro Auto-Save/
+Adobe Audition Auto-Save/
+
+# Adobe media cache
+*.cfa
+*.pek
+Media Cache Files/
+Peak Files/
+Rendered/
+
+# macOS
+.DS_Store
+.AppleDouble
+._*
+*.icloud
+
+# Node (if you add tooling later)
+node_modules/
+npm-debug.log*
+.env
+.env.local
+
+# Editor
+.vscode/*
+!.vscode/settings.json
+.cursor/
