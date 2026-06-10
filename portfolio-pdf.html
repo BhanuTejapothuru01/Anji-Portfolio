@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Ram editz — Portfolio PDF</title>
+  <link rel="stylesheet" href="css/fonts.css">
+  <link rel="stylesheet" href="css/portfolio-pdf.css">
+</head>
+<body>
+  <div class="pdf-doc" id="pdfDoc"></div>
+
+  <script src="js/config.js"></script>
+  <script src="js/videos.js"></script>
+  <script>
+    (function () {
+      var config = window.RAM_EDITZ_CONFIG || {};
+      var videos = (window.RAM_EDITZ_VIDEOS && window.RAM_EDITZ_VIDEOS.portfolio) || [];
+      var esc = config.escapeHtml || function (s) {
+        var d = document.createElement('div');
+        d.textContent = s || '';
+        return d.innerHTML;
+      };
+
+      var activeVideos = videos.filter(function (v) { return v.enabled !== false; });
+      var statsHtml = (config.stats || []).map(function (s) {
+        return (
+          '<div><div class="pdf-stat-value">' + esc(String(s.value) + (s.suffix || '')) + '</div>' +
+          '<div class="pdf-stat-label">' + esc(s.label) + '</div></div>'
+        );
+      }).join('');
+
+      var workHtml = activeVideos.map(function (v) {
+        var thumb = v.thumbnail ? ' style="background-image:url(' + esc(v.thumbnail) + ')"' : '';
+        return (
+          '<article class="pdf-work-card">' +
+            '<div class="pdf-work-thumb"' + thumb + '></div>' +
+            '<div class="pdf-work-body">' +
+              '<h3>' + esc(v.title) + '</h3>' +
+              '<p>' + esc(v.category || 'OTHER') + '</p>' +
+            '</div>' +
+          '</article>'
+        );
+      }).join('');
+
+      var tagsHtml = (config.marqueeServices || []).slice(0, 8).map(function (t) {
+        return '<span class="pdf-tag">' + esc(t) + '</span>';
+      }).join('');
+
+      var testimonialsHtml = (config.testimonials || []).map(function (t) {
+        return (
+          '<blockquote class="pdf-quote">' +
+            '<p>"' + esc(t.quote) + '"</p>' +
+            '<cite>' + esc(t.author) + '<span>' + esc(t.role) + '</span></cite>' +
+          '</blockquote>'
+        );
+      }).join('');
+
+      var year = new Date().getFullYear();
+
+      document.getElementById('pdfDoc').innerHTML =
+        '<section class="pdf-page">' +
+          '<div class="pdf-hero-row">' +
+            '<div>' +
+              '<p class="pdf-label">Video Production Portfolio</p>' +
+              '<h1 class="pdf-title">' + esc(config.logoLine1 || 'Ram') + '</h1>' +
+              '<p class="pdf-subtitle">' + esc(config.logoLine2 || 'editz') + '</p>' +
+              '<p class="pdf-tagline">' + esc(config.tagline || '') + '. Cinematic video production for brands that refuse to blend in.</p>' +
+            '</div>' +
+            '<div class="pdf-contact-block">' +
+              '<strong>Contact</strong>' +
+              esc(config.email || '') + '<br>' +
+              '+91 ' + esc(config.phone || '') + '<br>' +
+              esc(config.location || '') + '<br>' +
+              'Instagram: @the_ram_editzz' +
+            '</div>' +
+          '</div>' +
+          '<div class="pdf-stats">' + statsHtml + '</div>' +
+          '<h2 class="pdf-section-title">Selected Work</h2>' +
+          '<div class="pdf-grid">' + workHtml + '</div>' +
+          '<div class="pdf-tags">' + tagsHtml + '</div>' +
+          '<footer class="pdf-footer">' +
+            '<span class="pdf-footer-brand">' + esc(config.siteName || 'Ram editz') + '</span>' +
+            '<span>&copy; ' + year + ' · Portfolio PDF</span>' +
+          '</footer>' +
+        '</section>' +
+
+        '<section class="pdf-page">' +
+          '<h2 class="pdf-section-title">Services</h2>' +
+          '<div class="pdf-services">' +
+            '<div class="pdf-service"><h3>Brand Reels</h3><p>Transform your brand story into cinematic reels that captivate audiences and drive engagement across every platform.</p></div>' +
+            '<div class="pdf-service"><h3>Product Showcase</h3><p>Showcase your products with stunning visuals, dynamic lighting, and motion that makes every detail shine.</p></div>' +
+            '<div class="pdf-service"><h3>Social Media Packages</h3><p>Complete social media content packages designed to grow your following and boost brand awareness.</p></div>' +
+            '<div class="pdf-service"><h3>UGC / Testimonial Videos</h3><p>Authentic user-generated content and testimonials that build trust and convert.</p></div>' +
+          '</div>' +
+          '<h2 class="pdf-section-title">Our Process</h2>' +
+          '<div class="pdf-process">' +
+            '<div class="pdf-step"><div class="pdf-step-num">01</div><h3>Discovery</h3><p>We dive deep into your brand, goals, and audience to craft the perfect creative direction.</p></div>' +
+            '<div class="pdf-step"><div class="pdf-step-num">02</div><h3>Pre-Production</h3><p>Storyboarding, scripting, and planning every shot for a seamless production day.</p></div>' +
+            '<div class="pdf-step"><div class="pdf-step-num">03</div><h3>Production</h3><p>Cinematic filming with professional crew, gear, and creative direction on set.</p></div>' +
+            '<div class="pdf-step"><div class="pdf-step-num">04</div><h3>Post & Delivery</h3><p>Expert editing, color grading, sound design, and delivery in all formats you need.</p></div>' +
+          '</div>' +
+          '<h2 class="pdf-section-title">Client Testimonials</h2>' +
+          '<div class="pdf-testimonials">' + testimonialsHtml + '</div>' +
+          '<footer class="pdf-footer">' +
+            '<span class="pdf-footer-brand">' + esc(config.siteName || 'Ram editz') + '</span>' +
+            '<span>' + esc(config.email || '') + ' · WhatsApp: +91 ' + esc(config.phone || '') + '</span>' +
+          '</footer>' +
+        '</section>';
+
+      document.title = (config.siteName || 'Ram editz') + ' — Portfolio';
+    })();
+  </script>
+</body>
+</html>

@@ -175,8 +175,9 @@
 
 @media (min-width: 960px) {
   .hero-visual {
-    margin: -52px 0 0 auto;
+    margin: -84px 0 0 auto;
     max-width: none;
+    align-self: center;
   }
 }
 
@@ -376,7 +377,7 @@
 
 .hero-reel-play {
   position: absolute;
-  top: 50%;
+  top: calc(50% - 20px);
   left: 50%;
   z-index: 4;
   transform: translate(-50%, -50%);
