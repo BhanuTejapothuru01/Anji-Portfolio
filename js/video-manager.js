@@ -124,13 +124,17 @@
   function buildFeaturedHtml(featured) {
     var embed = toEmbedUrl(featured.url);
     var thumb = getThumbnail(featured);
-    var thumbStyle = thumb ? ' style="background-image:url(' + thumb + ')"' : '';
     var hasUrl = !!featured.url;
+    var hasBgVideo = hasUrl && isDirectVideo(featured.url);
+    var thumbStyle = (!hasBgVideo && thumb) ? ' style="background-image:url(' + thumb + ')"' : '';
+    var reelClass = 'featured-reel featured-reel-hud reveal' +
+      (hasBgVideo ? ' has-bg-video' : (thumb ? ' has-thumbnail' : ''));
 
     return (
-      '<div class="featured-reel featured-reel-hud reveal' + (thumb ? ' has-thumbnail' : '') + '" ' +
+      '<div class="' + reelClass + '" ' +
         (hasUrl ? 'data-video-url="' + escapeHtml(embed) + '" data-video-title="' + escapeHtml(featured.title) + '" role="button" tabindex="0"' : '') +
         ' aria-label="' + (hasUrl ? 'Play ' + escapeHtml(featured.title) : escapeHtml(featured.title)) + '"' + thumbStyle + '>' +
+        (hasBgVideo ? buildBgVideoHtml(featured, 'featured-reel-bg-video') : '') +
 
         '<svg class="featured-hud-vf" viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">' +
           '<circle cx="200" cy="200" r="150" stroke="rgba(255,140,66,0.35)" stroke-width="1.5"/>' +
@@ -196,13 +200,16 @@
   function buildHeroReelHtml(featured) {
     var embed = toEmbedUrl(featured.url);
     var thumb = getThumbnail(featured);
-    var thumbStyle = thumb ? ' style="background-image:url(' + escapeHtml(thumb) + ')"' : '';
     var hasUrl = !!featured.url;
+    var hasBgVideo = hasUrl && isDirectVideo(featured.url);
+    var thumbStyle = (!hasBgVideo && thumb) ? ' style="background-image:url(' + escapeHtml(thumb) + ')"' : '';
+    var reelClass = 'hero-reel' + (hasBgVideo ? ' has-bg-video' : (thumb ? ' has-thumbnail' : ''));
 
     return (
-      '<div class="hero-reel' + (thumb ? ' has-thumbnail' : '') + '" ' +
+      '<div class="' + reelClass + '" ' +
         (hasUrl ? 'data-video-url="' + escapeHtml(embed) + '" data-video-title="' + escapeHtml(featured.title) + '" role="button" tabindex="0"' : '') +
         ' aria-label="' + (hasUrl ? 'Play showreel' : escapeHtml(featured.title)) + '"' + thumbStyle + '>' +
+        (hasBgVideo ? buildBgVideoHtml(featured, 'hero-reel-bg-video') : '') +
         '<div class="hero-reel-scanline" aria-hidden="true"></div>' +
         '<div class="hero-reel-corners" aria-hidden="true"><span></span><span></span><span></span><span></span></div>' +
         '<div class="hero-reel-rec"><span class="hero-rec-dot"></span> REC</div>' +
@@ -230,6 +237,7 @@
 
     mount.innerHTML = buildHeroReelHtml(featured);
     initFeaturedTimecode();
+    initBackgroundVideos();
   }
 
   function buildEmptyState() {
@@ -270,7 +278,9 @@
   function initBackgroundVideos() {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
-    var bgVideos = document.querySelectorAll('.featured-card-bg-video, .video-thumb-bg-video');
+    var bgVideos = document.querySelectorAll(
+      '.featured-card-bg-video, .video-thumb-bg-video, .hero-reel-bg-video, .featured-reel-bg-video'
+    );
     if (!bgVideos.length) return;
 
     function tryPlay(videoEl) {
@@ -284,7 +294,11 @@
     }
 
     function bindObserver(videoEl) {
-      var root = videoEl.closest('.featured-card') || videoEl.closest('.video-thumb') || videoEl.closest('.video-card');
+      var root = videoEl.closest('.featured-card') ||
+        videoEl.closest('.video-thumb') ||
+        videoEl.closest('.video-card') ||
+        videoEl.closest('.hero-reel') ||
+        videoEl.closest('.featured-reel');
       if (!root || root.dataset.bgObserved || !('IntersectionObserver' in window)) return;
       root.dataset.bgObserved = '1';
 
@@ -315,11 +329,15 @@
       initBackgroundVideos.globalBound = true;
 
       window.addEventListener('rameditz:page-loaded', function () {
-        document.querySelectorAll('.featured-card-bg-video, .video-thumb-bg-video').forEach(tryPlay);
+        document.querySelectorAll(
+          '.featured-card-bg-video, .video-thumb-bg-video, .hero-reel-bg-video, .featured-reel-bg-video'
+        ).forEach(tryPlay);
       });
 
       document.addEventListener('pointerdown', function () {
-        document.querySelectorAll('.featured-card-bg-video, .video-thumb-bg-video').forEach(tryPlay);
+        document.querySelectorAll(
+          '.featured-card-bg-video, .video-thumb-bg-video, .hero-reel-bg-video, .featured-reel-bg-video'
+        ).forEach(tryPlay);
       }, { once: true, passive: true });
     }
   }

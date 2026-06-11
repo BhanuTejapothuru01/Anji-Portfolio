@@ -596,30 +596,6 @@ body.page-enter {
   font-weight: 400;
 }
 
-.hero-scroll {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-top: 48px;
-  font-size: 0.7rem;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: var(--gray);
-}
-
-.hero-scroll-line {
-  width: 48px;
-  height: 1px;
-  background: linear-gradient(90deg, var(--orange), transparent);
-  animation: scrollLine 2s ease infinite;
-}
-
-@keyframes scrollLine {
-  0%, 100% { opacity: 0.4; transform: scaleX(0.6); transform-origin: left; }
-  50% { opacity: 1; transform: scaleX(1); }
-}
-
-
 /* Marquee */
 .marquee-section {
   position: relative;
@@ -1473,11 +1449,9 @@ body.page-enter {
 }
 
 /* Home section spacing override */
-.section-home { min-height: 100vh; }
 .home-sections .section-block { position: relative; z-index: 1; }
 
 @media (max-width: 767px) {
-  .hero-scroll { justify-content: center; }
   .cta-band { margin-left: 16px; margin-right: 16px; padding: 48px 24px; }
 }
 

@@ -15,11 +15,7 @@
     (function () {
       var config = window.RAM_EDITZ_CONFIG || {};
       var videos = (window.RAM_EDITZ_VIDEOS && window.RAM_EDITZ_VIDEOS.portfolio) || [];
-      var esc = config.escapeHtml || function (s) {
-        var d = document.createElement('div');
-        d.textContent = s || '';
-        return d.innerHTML;
-      };
+      var esc = config.escapeHtml;
 
       var activeVideos = videos.filter(function (v) { return v.enabled !== false; });
       var statsHtml = (config.stats || []).map(function (s) {

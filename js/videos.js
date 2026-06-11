@@ -48,12 +48,12 @@ window.RAM_EDITZ_VIDEOS = {
     },
 
     {
-      id: 'text-animation',
+      id: 'life-of-video-editor',
       enabled: true,
-      title: 'Text Animation',
-      category: 'COMMERCIAL',
-      url: 'videos/text-animation.mp4',
-      thumbnail: 'assets/thumbs/text-animation.jpg'
+      title: 'The Life of Video Editor',
+      category: 'NARRATIVE',
+      url: 'videos/lv_0_20260611164922.mp4',
+      thumbnail: 'assets/thumbs/june-2026-reel.jpg'
     },
 
     {
@@ -63,6 +63,15 @@ window.RAM_EDITZ_VIDEOS = {
       category: 'CULTURE',
       url: 'videos/lv_0_20260517115221.mp4',
       thumbnail: 'assets/thumbs/urban-pulse.jpg'
+    },
+
+    {
+      id: 'text-animation',
+      enabled: true,
+      title: 'Text Animation',
+      category: 'COMMERCIAL',
+      url: 'videos/text-animation.mp4',
+      thumbnail: 'assets/thumbs/text-animation.jpg'
     },
 
     {

@@ -37,10 +37,6 @@ html, body {
   page-break-after: auto;
 }
 
-.pdf-accent {
-  color: #ff8c42;
-}
-
 .pdf-label {
   font-size: 9px;
   font-weight: 700;

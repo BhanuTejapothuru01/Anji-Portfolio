@@ -29,9 +29,40 @@
   transform: translateY(-2px);
 }
 
-.featured-reel-hud.has-thumbnail {
+.featured-reel-hud.has-thumbnail,
+.featured-reel-hud.has-bg-video {
   background-size: cover;
   background-position: center;
+}
+
+.featured-reel-bg-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  z-index: 0;
+  pointer-events: none;
+  background: #0a0a0c;
+}
+
+.featured-reel-hud.has-bg-video::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    105deg,
+    rgba(0, 0, 0, 0.35) 0%,
+    rgba(0, 0, 0, 0.08) 45%,
+    rgba(0, 0, 0, 0.3) 100%
+  );
+  z-index: 1;
+  pointer-events: none;
+}
+
+.featured-reel-hud.has-bg-video .featured-hud-vf {
+  opacity: 0.12;
 }
 
 .featured-reel-hud.has-thumbnail::before {

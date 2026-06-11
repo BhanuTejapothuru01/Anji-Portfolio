@@ -441,13 +441,7 @@
     window.addEventListener('rameditz:page-loaded', function () { play('pageLoad'); });
   }
 
-  var api = {
-    play: play,
-    toggleMute: toggleMute,
-    isMuted: isMuted
-  };
-
-  window.RamEditzFeedback = api;
+  window.RamEditzFeedback = { play: play };
 
   function init() {
     injectToggle();

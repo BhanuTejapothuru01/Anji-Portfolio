@@ -290,6 +290,113 @@
         window.revealObserve(el);
       });
     }
+
+    initHeroLetterHover();
+  }
+
+  /* ---- Hero title — cursor-proximity letter hover ---- */
+  function initHeroLetterHover() {
+    if (isTouch || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    var title = document.querySelector('.hero-premium .hero-title');
+    if (!title || title.dataset.letterHoverBound) return;
+    title.dataset.letterHoverBound = '1';
+
+    var words = title.querySelectorAll('.hero-word');
+    if (!words.length) return;
+
+    function wrapWordLetters(word) {
+      if (word.dataset.lettersWrapped) return;
+      word.dataset.lettersWrapped = '1';
+
+      var text = word.textContent;
+      var isAccent = word.classList.contains('hero-accent');
+      word.textContent = '';
+      if (isAccent) word.classList.remove('hero-accent');
+
+      for (var i = 0; i < text.length; i++) {
+        var letter = document.createElement('span');
+        letter.className = 'hero-letter' + (isAccent ? ' hero-accent' : '');
+        letter.textContent = text.charAt(i);
+        letter.setAttribute('aria-hidden', 'true');
+        word.appendChild(letter);
+      }
+    }
+
+    words.forEach(wrapWordLetters);
+
+    var letters = title.querySelectorAll('.hero-letter');
+    if (!letters.length) return;
+
+    var maxDist = 72;
+    var rafId = null;
+    var mx = -9999;
+    var my = -9999;
+
+    function markLettersReady(word) {
+      word.querySelectorAll('.hero-letter').forEach(function (letter) {
+        letter.classList.add('hero-letter-ready');
+      });
+    }
+
+    words.forEach(function (word) {
+      word.addEventListener('animationend', function () {
+        markLettersReady(word);
+      }, { once: true });
+    });
+
+    setTimeout(function () {
+      words.forEach(markLettersReady);
+    }, 1200);
+
+    function applyHover() {
+      rafId = null;
+
+      letters.forEach(function (letter) {
+        if (!letter.classList.contains('hero-letter-ready')) return;
+
+        var rect = letter.getBoundingClientRect();
+        var cx = rect.left + rect.width * 0.5;
+        var cy = rect.top + rect.height * 0.5;
+        var dx = mx - cx;
+        var dy = my - cy;
+        var dist = Math.hypot(dx, dy);
+        var t = Math.max(0, 1 - dist / maxDist);
+        t = t * t * (3 - 2 * t);
+        var lift = t * 16;
+        var scale = 1 + t * 0.16;
+        var pullX = dx * t * 0.18;
+        var rotate = (dx / Math.max(rect.width, 1)) * t * 12;
+
+        letter.style.setProperty('--hero-lift', String(lift));
+        letter.style.setProperty('--hero-scale', String(scale));
+        letter.style.setProperty('--hero-pull-x', String(pullX));
+        letter.style.setProperty('--hero-rotate', rotate.toFixed(2) + 'deg');
+        letter.classList.toggle('is-near-cursor', t > 0.08);
+      });
+    }
+
+    function scheduleUpdate() {
+      if (!rafId) rafId = requestAnimationFrame(applyHover);
+    }
+
+    title.addEventListener('mousemove', function (e) {
+      mx = e.clientX;
+      my = e.clientY;
+      scheduleUpdate();
+    });
+
+    title.addEventListener('mouseleave', function () {
+      mx = -9999;
+      my = -9999;
+      letters.forEach(function (letter) {
+        letter.style.setProperty('--hero-lift', '0');
+        letter.style.setProperty('--hero-scale', '1');
+        letter.style.setProperty('--hero-pull-x', '0');
+        letter.style.setProperty('--hero-rotate', '0deg');
+        letter.classList.remove('is-near-cursor');
+      });
+    });
   }
 
   /* ---- Build featured preview (from js/videos.js) ---- */
