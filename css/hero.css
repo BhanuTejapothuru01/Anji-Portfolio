@@ -125,6 +125,9 @@
     transform 0.16s cubic-bezier(0.22, 1, 0.36, 1),
     text-shadow 0.18s ease,
     filter 0.18s ease;
+}
+
+.hero-letter.hero-letter-ready.is-near-cursor {
   will-change: transform;
 }
 
@@ -199,25 +202,12 @@
   filter:
     drop-shadow(0 0 22px rgba(255, 140, 66, 0.5))
     drop-shadow(0 0 48px rgba(255, 107, 26, 0.22));
-  animation: heroShimmer 4.5s ease-in-out infinite, heroAccentPulse 3.2s ease-in-out infinite alternate;
+  animation: heroShimmer 5.5s ease-in-out infinite;
 }
 
 @keyframes heroShimmer {
   0%, 100% { background-position: 0% center; }
   50% { background-position: 100% center; }
-}
-
-@keyframes heroAccentPulse {
-  from {
-    filter:
-      drop-shadow(0 0 18px rgba(255, 140, 66, 0.38))
-      drop-shadow(0 0 36px rgba(255, 107, 26, 0.16));
-  }
-  to {
-    filter:
-      drop-shadow(0 0 32px rgba(255, 140, 66, 0.62))
-      drop-shadow(0 0 64px rgba(255, 107, 26, 0.28));
-  }
 }
 
 .hero-title-accent-line {
@@ -357,7 +347,6 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  margin-top: 48px;
   font-size: 0.7rem;
   letter-spacing: 0.15em;
   text-transform: uppercase;
@@ -806,11 +795,14 @@
 }
 
 html.perf-lite .hero-accent,
-html.perf-lite .hero-premium .hero-title::before {
+html.perf-smooth .hero-accent,
+html.perf-lite .hero-premium .hero-title::before,
+html.perf-smooth .hero-premium .hero-title::before {
   animation: none;
 }
 
-html.perf-lite .hero-premium .hero-title::before {
+html.perf-lite .hero-premium .hero-title::before,
+html.perf-smooth .hero-premium .hero-title::before {
   opacity: 1;
 }
 

@@ -6,9 +6,12 @@
 
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
   if (document.documentElement.classList.contains('perf-lite')) return;
+  if (document.documentElement.classList.contains('perf-smooth')) return;
 
   var pointer = { x: 0.5, y: 0.5, sx: 0.5, sy: 0.5 };
-  var running = true;
+  var running = false;
+  var recentlyMoved = false;
+  var moveIdleTimer = null;
   var layers = [];
 
   function registerLayers() {
@@ -37,7 +40,10 @@
   }
 
   function tick() {
-    if (!running) return;
+    if (!running || !recentlyMoved || document.hidden) {
+      running = false;
+      return;
+    }
 
     pointer.sx += (pointer.x - pointer.sx) * 0.07;
     pointer.sy += (pointer.y - pointer.sy) * 0.07;
@@ -55,16 +61,31 @@
     requestAnimationFrame(tick);
   }
 
+  function startTick() {
+    if (!running && recentlyMoved && !document.hidden) {
+      running = true;
+      requestAnimationFrame(tick);
+    }
+  }
+
   document.addEventListener('mousemove', function (e) {
     pointer.x = e.clientX / window.innerWidth;
     pointer.y = e.clientY / window.innerHeight;
+    recentlyMoved = true;
+    clearTimeout(moveIdleTimer);
+    moveIdleTimer = setTimeout(function () {
+      recentlyMoved = false;
+    }, 200);
+    startTick();
   }, { passive: true });
 
   document.addEventListener('visibilitychange', function () {
-    running = !document.hidden;
-    if (running) requestAnimationFrame(tick);
+    if (document.hidden) {
+      running = false;
+    } else if (recentlyMoved) {
+      startTick();
+    }
   });
 
   registerLayers();
-  if (layers.length) requestAnimationFrame(tick);
 })();

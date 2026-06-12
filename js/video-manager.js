@@ -65,9 +65,10 @@
     if (!isDirectVideo(video.url)) return '';
     var poster = getThumbnail(video);
     var posterAttr = poster ? ' poster="' + escapeHtml(poster) + '"' : '';
+    var eager = className === 'featured-card-bg-video' || className === 'hero-reel-bg-video';
     return (
       '<video class="' + className + '" src="' + escapeHtml(video.url) + '"' +
-      posterAttr + ' muted loop playsinline autoplay preload="auto" aria-hidden="true"></video>'
+      posterAttr + ' muted loop playsinline autoplay preload="' + (eager ? 'auto' : 'metadata') + '" aria-hidden="true"></video>'
     );
   }
 
@@ -283,13 +284,40 @@
     );
     if (!bgVideos.length) return;
 
+    function warmBuffer(videoEl) {
+      if (videoEl.preload !== 'auto') {
+        videoEl.preload = 'auto';
+        videoEl.load();
+      }
+    }
+
     function tryPlay(videoEl) {
-      if (!videoEl) return;
+      if (!videoEl || videoEl.dataset.bgVisible !== '1') return;
       videoEl.muted = true;
       videoEl.defaultMuted = true;
+      if (!videoEl.paused) return;
       var playPromise = videoEl.play();
       if (playPromise && playPromise.catch) {
         playPromise.catch(function () { /* retry after interaction */ });
+      }
+    }
+
+    function resumeIfVisible(videoEl) {
+      if (videoEl.dataset.bgVisible === '1') tryPlay(videoEl);
+    }
+
+    function pauseVideo(videoEl) {
+      if (!videoEl || videoEl.paused) return;
+      videoEl.pause();
+    }
+
+    function setVisible(videoEl, visible) {
+      videoEl.dataset.bgVisible = visible ? '1' : '0';
+      if (visible) {
+        warmBuffer(videoEl);
+        tryPlay(videoEl);
+      } else {
+        pauseVideo(videoEl);
       }
     }
 
@@ -304,41 +332,72 @@
 
       var observer = new IntersectionObserver(function (entries) {
         entries.forEach(function (entry) {
-          if (entry.isIntersecting) tryPlay(videoEl);
-          else if (!videoEl.paused) videoEl.pause();
+          setVisible(videoEl, entry.isIntersecting);
         });
-      }, { threshold: 0.12, rootMargin: '40px 0px' });
+      }, { threshold: 0.08, rootMargin: '60px 0px' });
 
       observer.observe(root);
     }
 
-    bgVideos.forEach(function (videoEl) {
-      bindObserver(videoEl);
+    function bindVideoEvents(videoEl) {
+      if (videoEl.dataset.bgReady) return;
+      videoEl.dataset.bgReady = '1';
 
-      if (!videoEl.dataset.bgReady) {
-        videoEl.dataset.bgReady = '1';
-        videoEl.addEventListener('canplay', function () {
+      videoEl.addEventListener('canplay', function () {
+        resumeIfVisible(videoEl);
+      });
+
+      videoEl.addEventListener('stalled', function () {
+        resumeIfVisible(videoEl);
+      });
+
+      videoEl.addEventListener('waiting', function () {
+        resumeIfVisible(videoEl);
+      });
+
+      videoEl.addEventListener('pause', function () {
+        if (videoEl.dataset.bgVisible === '1' && !document.hidden) {
           tryPlay(videoEl);
-        }, { once: true });
-      }
+        }
+      });
+    }
 
-      tryPlay(videoEl);
+    bgVideos.forEach(function (videoEl, index) {
+      bindObserver(videoEl);
+      bindVideoEvents(videoEl);
+
+      setTimeout(function () {
+        var root = videoEl.closest('.featured-card') ||
+          videoEl.closest('.video-thumb') ||
+          videoEl.closest('.video-card') ||
+          videoEl.closest('.hero-reel') ||
+          videoEl.closest('.featured-reel');
+        if (!root) return;
+        var rect = root.getBoundingClientRect();
+        if (rect.bottom > 0 && rect.top < window.innerHeight) {
+          setVisible(videoEl, true);
+        }
+      }, index * 80);
     });
 
     if (!initBackgroundVideos.globalBound) {
       initBackgroundVideos.globalBound = true;
 
-      window.addEventListener('rameditz:page-loaded', function () {
+      function playVisibleVideos() {
         document.querySelectorAll(
           '.featured-card-bg-video, .video-thumb-bg-video, .hero-reel-bg-video, .featured-reel-bg-video'
-        ).forEach(tryPlay);
+        ).forEach(function (videoEl) {
+          if (videoEl.dataset.bgVisible === '1') tryPlay(videoEl);
+        });
+      }
+
+      window.addEventListener('rameditz:page-loaded', playVisibleVideos);
+
+      document.addEventListener('visibilitychange', function () {
+        if (!document.hidden) playVisibleVideos();
       });
 
-      document.addEventListener('pointerdown', function () {
-        document.querySelectorAll(
-          '.featured-card-bg-video, .video-thumb-bg-video, .hero-reel-bg-video, .featured-reel-bg-video'
-        ).forEach(tryPlay);
-      }, { once: true, passive: true });
+      document.addEventListener('pointerdown', playVisibleVideos, { once: true, passive: true });
     }
   }
 

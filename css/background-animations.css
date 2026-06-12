@@ -247,3 +247,27 @@ html.perf-lite .hero-frame-ring,
 html.perf-lite .hero-float-card {
   animation: none !important;
 }
+
+/* Balanced smooth mode — fewer always-on GPU effects */
+html.perf-smooth .grain-overlay {
+  opacity: 0.02;
+}
+
+html.perf-smooth .bg-aurora {
+  animation-duration: 32s;
+  opacity: 0.4;
+}
+
+html.perf-smooth .hero-visual-glow,
+html.perf-smooth .hero-frame-ring {
+  animation: none !important;
+}
+
+html.perf-smooth .marquee-track {
+  animation-duration: 48s;
+}
+
+html.perf-smooth .section-block:not(.section-home) {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 600px;
+}

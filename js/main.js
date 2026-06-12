@@ -105,10 +105,14 @@
   });
 
   /* ---- Header scroll effect ---- */
+  var scrollTicking = false;
   window.addEventListener('scroll', function () {
-    if (header) {
+    if (!header || scrollTicking) return;
+    scrollTicking = true;
+    requestAnimationFrame(function () {
       header.classList.toggle('header-scrolled', window.scrollY > 40);
-    }
+      scrollTicking = false;
+    });
   }, { passive: true });
 
   /* ---- Nav overlay ---- */

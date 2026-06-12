@@ -9,7 +9,8 @@
   mount.dataset.bgEnhanced = '1';
 
   var isLite = document.documentElement.classList.contains('perf-lite');
-  var particleCount = isLite ? 0 : 8;
+  var isSmooth = document.documentElement.classList.contains('perf-smooth');
+  var particleCount = isLite ? 0 : (isSmooth ? 3 : 5);
   var particles = '';
 
   for (var i = 0; i < particleCount; i++) {
@@ -40,7 +41,7 @@
     '<div class="bg-aurora"></div>' +
     '<div class="bg-grid"></div>';
 
-  if (!isLite) {
+  if (!isLite && !isSmooth) {
     extras +=
       '<div class="bg-light-leak bg-light-leak-1"></div>' +
       '<div class="bg-light-leak bg-light-leak-2"></div>';
@@ -52,7 +53,7 @@
 
   mount.insertAdjacentHTML('afterbegin', extras);
 
-  if (!isLite) {
+  if (!isLite && !isSmooth) {
     mount.insertAdjacentHTML('beforeend',
       '<div class="bokeh bokeh-6"></div>' +
       '<div class="bokeh bokeh-7"></div>'

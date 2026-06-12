@@ -1,6 +1,7 @@
 /** Site configuration — edit these values to customize your portfolio */
 var config = {
   siteName: 'Ram editz',
+  designStudio: 'Kyle Studios',
   logoLine1: 'Ram',
   logoLine2: 'editz',
   tagline: 'We Make Brands Move',
@@ -85,12 +86,20 @@ config.getWhatsAppProjectLink = function (details) {
 
 (function () {
   var conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
-  var slowConn = conn && (conn.saveData || conn.effectiveType === '2g' || conn.effectiveType === 'slow-2g');
+  var connType = conn && conn.effectiveType;
+  var slowConn = conn && (conn.saveData || connType === '2g' || connType === 'slow-2g' || connType === '3g');
   var lowPower = navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4;
+  var lowMemory = navigator.deviceMemory && navigator.deviceMemory <= 4;
   var coarse = window.matchMedia('(hover: none), (pointer: coarse)').matches;
   var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var root = document.documentElement;
 
-  if (reduced || coarse || lowPower || slowConn) {
-    document.documentElement.classList.add('perf-lite');
+  if (reduced || coarse || lowPower || slowConn || lowMemory) {
+    root.classList.add('perf-lite');
+  }
+
+  /* Balanced mode — trims the heaviest always-on effects on desktop */
+  if (!reduced && !root.classList.contains('perf-lite')) {
+    root.classList.add('perf-smooth');
   }
 })();

@@ -65,6 +65,9 @@
     var angle = -12;
     var active = false;
     var rafId = 0;
+    var ticking = false;
+    var recentlyMoved = false;
+    var moveIdleTimer = null;
     var idleTimer = null;
     var clickTimer = null;
     var tcStart = Date.now();
@@ -95,6 +98,9 @@
       clearTimeout(idleTimer);
       clearTimeout(clickTimer);
       cancelAnimationFrame(rafId);
+      rafId = 0;
+      ticking = false;
+      recentlyMoved = false;
     }
 
     function resetIdle() {
@@ -117,7 +123,10 @@
     }
 
     function tick() {
-      if (!active) return;
+      if (!active) {
+        ticking = false;
+        return;
+      }
       fx += (mx - fx) * 0.2;
       fy += (my - fy) * 0.2;
       t1x += (fx - t1x) * 0.14;
@@ -138,7 +147,19 @@
       frameCount += 1;
       if (frameCount % 30 === 0) updateTimecode();
 
-      rafId = requestAnimationFrame(tick);
+      if (recentlyMoved) {
+        rafId = requestAnimationFrame(tick);
+      } else {
+        rafId = 0;
+        ticking = false;
+      }
+    }
+
+    function startTick() {
+      if (!ticking && active) {
+        ticking = true;
+        rafId = requestAnimationFrame(tick);
+      }
     }
 
     document.addEventListener('mousemove', function (e) {
@@ -165,9 +186,15 @@
         t2y = my;
         tcStart = Date.now();
         activate();
-        tick();
       }
 
+      recentlyMoved = true;
+      clearTimeout(moveIdleTimer);
+      moveIdleTimer = setTimeout(function () {
+        recentlyMoved = false;
+      }, 180);
+
+      startTick();
       resetIdle();
       film.style.setProperty('--film-speed', Math.min(2.2, 0.65 + speed * 0.07).toFixed(2));
       film.style.setProperty('--film-wobble', Math.min(6, speed * 0.35).toFixed(2) + 'deg');
@@ -297,6 +324,7 @@
   /* ---- Hero title — cursor-proximity letter hover ---- */
   function initHeroLetterHover() {
     if (isTouch || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    var isSmooth = document.documentElement.classList.contains('perf-smooth');
 
     var title = document.querySelector('.hero-premium .hero-title');
     if (!title || title.dataset.letterHoverBound) return;
@@ -328,15 +356,31 @@
     var letters = title.querySelectorAll('.hero-letter');
     if (!letters.length) return;
 
-    var maxDist = 72;
+    var maxDist = isSmooth ? 64 : 72;
     var rafId = null;
     var mx = -9999;
     var my = -9999;
+    var letterCache = [];
+
+    function cacheLetterPositions() {
+      letterCache = [];
+      letters.forEach(function (letter) {
+        if (!letter.classList.contains('hero-letter-ready')) return;
+        var rect = letter.getBoundingClientRect();
+        letterCache.push({
+          el: letter,
+          cx: rect.left + rect.width * 0.5,
+          cy: rect.top + rect.height * 0.5,
+          halfW: Math.max(rect.width, 1) * 0.5
+        });
+      });
+    }
 
     function markLettersReady(word) {
       word.querySelectorAll('.hero-letter').forEach(function (letter) {
         letter.classList.add('hero-letter-ready');
       });
+      cacheLetterPositions();
     }
 
     words.forEach(function (word) {
@@ -347,33 +391,44 @@
 
     setTimeout(function () {
       words.forEach(markLettersReady);
+      cacheLetterPositions();
     }, 1200);
+
+    window.addEventListener('resize', cacheLetterPositions, { passive: true });
 
     function applyHover() {
       rafId = null;
+      if (!letterCache.length) cacheLetterPositions();
 
-      letters.forEach(function (letter) {
-        if (!letter.classList.contains('hero-letter-ready')) return;
+      for (var i = 0; i < letterCache.length; i++) {
+        var item = letterCache[i];
+        var dx = mx - item.cx;
+        var dy = my - item.cy;
+        if (Math.abs(dx) > maxDist * 1.35 || Math.abs(dy) > maxDist * 1.35) {
+          if (item.el.classList.contains('is-near-cursor')) {
+            item.el.style.setProperty('--hero-lift', '0');
+            item.el.style.setProperty('--hero-scale', '1');
+            item.el.style.setProperty('--hero-pull-x', '0');
+            item.el.style.setProperty('--hero-rotate', '0deg');
+            item.el.classList.remove('is-near-cursor');
+          }
+          continue;
+        }
 
-        var rect = letter.getBoundingClientRect();
-        var cx = rect.left + rect.width * 0.5;
-        var cy = rect.top + rect.height * 0.5;
-        var dx = mx - cx;
-        var dy = my - cy;
         var dist = Math.hypot(dx, dy);
         var t = Math.max(0, 1 - dist / maxDist);
         t = t * t * (3 - 2 * t);
-        var lift = t * 16;
-        var scale = 1 + t * 0.16;
-        var pullX = dx * t * 0.18;
-        var rotate = (dx / Math.max(rect.width, 1)) * t * 12;
+        var lift = t * (isSmooth ? 12 : 16);
+        var scale = 1 + t * (isSmooth ? 0.12 : 0.16);
+        var pullX = dx * t * 0.16;
+        var rotate = (dx / item.halfW) * t * (isSmooth ? 8 : 12);
 
-        letter.style.setProperty('--hero-lift', String(lift));
-        letter.style.setProperty('--hero-scale', String(scale));
-        letter.style.setProperty('--hero-pull-x', String(pullX));
-        letter.style.setProperty('--hero-rotate', rotate.toFixed(2) + 'deg');
-        letter.classList.toggle('is-near-cursor', t > 0.08);
-      });
+        item.el.style.setProperty('--hero-lift', String(lift));
+        item.el.style.setProperty('--hero-scale', String(scale));
+        item.el.style.setProperty('--hero-pull-x', String(pullX));
+        item.el.style.setProperty('--hero-rotate', rotate.toFixed(2) + 'deg');
+        item.el.classList.toggle('is-near-cursor', t > 0.08);
+      }
     }
 
     function scheduleUpdate() {
@@ -447,7 +502,7 @@
     var line1 = config.logoLine1 || 'Ram';
     var line2 = config.logoLine2 || 'editz';
     var site = config.siteName || 'Ram editz';
-    var tagline = config.tagline || 'We Make Brands Move';
+    var designStudio = config.designStudio || 'Kyle Studios';
 
     mount.innerHTML =
       '<footer class="footer-premium">' +
@@ -481,15 +536,16 @@
           '</ul></div>' +
         '</div>' +
         '<div class="footer-bottom">' +
-          '<span>&copy; ' + year + ' ' + site + '. All rights reserved.</span>' +
-          '<span>' + tagline + '</span>' +
+          '<span>&copy; ' + year + ' ' + escapeHtml(site) + '. All rights reserved.</span>' +
+          '<span>Design by ' + escapeHtml(designStudio) + '</span>' +
         '</div>' +
       '</footer>';
   }
 
   /* ---- 3D tilt on cards ---- */
   function initTilt() {
-    if (isTouch || document.documentElement.classList.contains('perf-lite')) return;
+    if (isTouch || document.documentElement.classList.contains('perf-lite') ||
+        document.documentElement.classList.contains('perf-smooth')) return;
 
     var tiltPending = false;
     var tiltTarget = null;

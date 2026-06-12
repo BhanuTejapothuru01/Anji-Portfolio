@@ -413,6 +413,8 @@ main {
   z-index: 0;
   pointer-events: none;
   background: #000;
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
 
 .video-thumb-overlay {
@@ -1180,6 +1182,7 @@ main {
   }
 
   .hero-content { text-align: center; }
+  .hero-actions { text-align: center; }
   .hero-cta { justify-content: center; }
 }
 

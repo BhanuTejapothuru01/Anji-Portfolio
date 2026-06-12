@@ -784,6 +784,8 @@ body.page-enter {
   z-index: 0;
   pointer-events: none;
   background: #0a0a0c;
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
 
 .featured-card-overlay {
@@ -1445,7 +1447,6 @@ body.page-enter {
 /* Tilt card */
 .tilt-card {
   transform-style: preserve-3d;
-  will-change: transform;
 }
 
 /* Home section spacing override */
