@@ -22,7 +22,7 @@ var config = {
     'Brand Reels',
     'Product Films',
     'Social Content',
-    'Typograpghy Animations',
+    'Typography Animations',
     'Commercials',
     'Live Events',
     'Testimonials',

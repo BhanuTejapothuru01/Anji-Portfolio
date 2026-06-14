@@ -43,7 +43,7 @@ window.RAM_EDITZ_VIDEOS = {
       enabled: true,
       title: '15 Seconds Simple and Clean',
       category: 'COMMERCIAL',
-      url: 'videos/15-seconds-simple-and-clean.mp4',
+      url: 'https://res.cloudinary.com/dekwcqwij/video/upload/v1781416403/portfolio_videos/j2jntefmfwex4wnbdnpo.mp4',
       thumbnail: 'assets/thumbs/simple-clean-15s.jpg'
     },
 
@@ -52,7 +52,7 @@ window.RAM_EDITZ_VIDEOS = {
       enabled: true,
       title: 'The Life of Video Editor',
       category: 'NARRATIVE',
-      url: 'videos/lv_0_20260611164922.mp4',
+      url: 'https://res.cloudinary.com/dekwcqwij/video/upload/v1781416405/portfolio_videos/v7tq6qxqz5ntwvgo34ed.mp4',
       thumbnail: 'assets/thumbs/june-2026-reel.jpg'
     },
 
@@ -61,7 +61,7 @@ window.RAM_EDITZ_VIDEOS = {
       enabled: true,
       title: "Documentary — 'Urban Pulse'",
       category: 'CULTURE',
-      url: 'videos/lv_0_20260517115221.mp4',
+      url: 'https://res.cloudinary.com/dekwcqwij/video/upload/v1781416412/portfolio_videos/wip7ddktzkn6duuv8dmc.mp4',
       thumbnail: 'assets/thumbs/urban-pulse.jpg'
     },
 
@@ -70,7 +70,7 @@ window.RAM_EDITZ_VIDEOS = {
       enabled: true,
       title: 'Text Animation',
       category: 'COMMERCIAL',
-      url: 'videos/text-animation.mp4',
+      url: 'https://res.cloudinary.com/dekwcqwij/video/upload/v1781416414/portfolio_videos/tlhyqhbhsteyt3axmsm1.mp4',
       thumbnail: 'assets/thumbs/text-animation.jpg'
     },
 
@@ -79,7 +79,7 @@ window.RAM_EDITZ_VIDEOS = {
       enabled: true,
       title: 'Aarva Ad',
       category: 'COMMERCIAL',
-      url: 'videos/aarva-ad.mp4',
+      url: 'https://res.cloudinary.com/dekwcqwij/video/upload/v1781416416/portfolio_videos/r5njpp8kukmoxl6fjp4c.mp4',
       thumbnail: 'assets/thumbs/aarva-ad.jpg'
     }
   ]
