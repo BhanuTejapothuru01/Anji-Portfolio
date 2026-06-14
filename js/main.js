@@ -117,34 +117,52 @@
 
   /* ---- Nav overlay ---- */
   function fb(name) {
-    if (window.RamEditzFeedback) window.RamEditzFeedback.play(name);
+    if (!window.RamEditzFeedback) return;
+    if (RamEditzFeedback.playNow) RamEditzFeedback.playNow(name);
+    else RamEditzFeedback.play(name);
   }
 
   function openNav() {
-    navOverlay.classList.add('open');
-    navOverlay.setAttribute('aria-hidden', 'false');
-    menuBtn.setAttribute('aria-expanded', 'true');
-    document.body.style.overflow = 'hidden';
-    fb('menuOpen');
+    function reveal() {
+      fb('menuOpen');
+      navOverlay.classList.add('open');
+      navOverlay.setAttribute('aria-hidden', 'false');
+      menuBtn.setAttribute('aria-expanded', 'true');
+      document.body.style.overflow = 'hidden';
+    }
+
+    if (window.RamEditzFeedback && RamEditzFeedback.prepare) {
+      RamEditzFeedback.prepare().then(reveal);
+    } else {
+      reveal();
+    }
   }
 
   function closeNav(silent) {
-    navOverlay.classList.remove('open');
-    navOverlay.classList.remove('nav-item-hover');
-    navOverlay.setAttribute('aria-hidden', 'true');
-    menuBtn.setAttribute('aria-expanded', 'false');
-    document.body.style.overflow = '';
-    var bgLabel = navOverlay && navOverlay.querySelector('.nav-bg-label');
-    if (bgLabel) {
-      bgLabel.textContent = '';
-      bgLabel.removeAttribute('data-text');
+    function hide() {
+      if (!silent) fb('menuClose');
+      navOverlay.classList.remove('open');
+      navOverlay.classList.remove('nav-item-hover');
+      navOverlay.setAttribute('aria-hidden', 'true');
+      menuBtn.setAttribute('aria-expanded', 'false');
+      document.body.style.overflow = '';
+      var bgLabel = navOverlay && navOverlay.querySelector('.nav-bg-label');
+      if (bgLabel) {
+        bgLabel.textContent = '';
+        bgLabel.removeAttribute('data-text');
+      }
+      if (navOverlay) {
+        navOverlay.querySelectorAll('.nav-link-hovered').forEach(function (l) {
+          l.classList.remove('nav-link-hovered');
+        });
+      }
     }
-    if (navOverlay) {
-      navOverlay.querySelectorAll('.nav-link-hovered').forEach(function (l) {
-        l.classList.remove('nav-link-hovered');
-      });
+
+    if (!silent && window.RamEditzFeedback && RamEditzFeedback.prepare) {
+      RamEditzFeedback.prepare().then(hide);
+    } else {
+      hide();
     }
-    if (!silent) fb('menuClose');
   }
 
   if (menuBtn) {
@@ -153,7 +171,12 @@
     }, { passive: true });
     menuBtn.addEventListener('click', openNav);
   }
-  if (navClose) navClose.addEventListener('click', closeNav);
+  if (navClose) {
+    navClose.addEventListener('pointerdown', function () {
+      if (window.RamEditzFeedback && RamEditzFeedback.prepare) RamEditzFeedback.prepare();
+    }, { passive: true });
+    navClose.addEventListener('click', closeNav);
+  }
 
   navLinks.forEach(function (link) {
     link.addEventListener('click', function () {

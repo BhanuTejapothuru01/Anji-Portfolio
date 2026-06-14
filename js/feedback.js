@@ -70,6 +70,10 @@
     return ctx;
   }
 
+  function isAudioReady() {
+    return !!(ctx && ctx.state === 'running');
+  }
+
   function warmContext(c) {
     try {
       var buffer = c.createBuffer(1, 1, c.sampleRate);
@@ -151,15 +155,16 @@
     return (v != null ? v : fallback) * MASTER_VOLUME;
   }
 
-  function tone(freq, duration, type, volume, delay) {
+  function tone(freq, duration, type, volume, delay, fastAttack) {
     if (isSoundMuted() || !ctx) return;
     var t0 = ctx.currentTime + (delay || 0);
+    var attack = fastAttack ? 0.001 : 0.008;
     var osc = ctx.createOscillator();
     var gain = ctx.createGain();
     osc.type = type || 'sine';
     osc.frequency.setValueAtTime(freq, t0);
     gain.gain.setValueAtTime(0.0001, t0);
-    gain.gain.exponentialRampToValueAtTime(Math.max(vol(volume, 0.08), 0.0001), t0 + 0.008);
+    gain.gain.exponentialRampToValueAtTime(Math.max(vol(volume, 0.08), 0.0001), t0 + attack);
     gain.gain.exponentialRampToValueAtTime(0.0001, t0 + duration);
     osc.connect(gain);
     gain.connect(ctx.destination);
@@ -230,16 +235,13 @@
       vibrate('light');
     },
     menuOpen: function () {
-      tone(280, 0.1, 'sine', 0.06, 0);
-      sweep(160, 720, 0.22, 0.04);
-      noiseBurst(0.06, 0.03, 0.03);
-      tone(440, 0.08, 'triangle', 0.03, 0.05);
+      tone(340, 0.13, 'sine', 0.08, 0, true);
+      tone(520, 0.09, 'triangle', 0.05, 0.015, true);
       vibrate('menuOpen');
     },
     menuClose: function () {
-      tone(180, 0.08, 'triangle', 0.06, 0);
-      sweep(480, 100, 0.16, 0.035);
-      noiseBurst(0.04, 0.02, 0.02);
+      tone(220, 0.1, 'triangle', 0.07, 0, true);
+      tone(140, 0.08, 'sine', 0.04, 0.02, true);
       vibrate('menuClose');
     },
     nav: function () {
@@ -363,13 +365,16 @@
     if (force) soundMuted = wasSoundMuted;
   }
 
-  function play(name, force) {
+  function playNow(name, force) {
     var hapticName = SOUND_HAPTIC[name];
     if (!force && isSoundMuted()) {
       if (hapticName) triggerHaptic(hapticName);
       return;
     }
-
+    if (isAudioReady()) {
+      runSound(name, force);
+      return;
+    }
     unlock().then(function (ready) {
       if (!ready) return;
       if (!force && isSoundMuted()) {
@@ -378,6 +383,10 @@
       }
       runSound(name, force);
     });
+  }
+
+  function play(name, force) {
+    playNow(name, force);
   }
 
   function toggleSound() {
@@ -554,15 +563,25 @@
       if (!el) return;
       visualPulse(el);
       if (!isTouch) return;
-      if (el.id === 'menuBtn') { vibrate('menuOpen'); return; }
-      if (el.id === 'navClose') { vibrate('menuClose'); return; }
+      if (el.id === 'menuBtn' || el.id === 'navClose') return;
     }, { passive: true });
   }
 
+  var pageLoadPending = false;
+
+  function tryPageLoadSound() {
+    if (!pageLoadPending || isSoundMuted()) return;
+    pageLoadPending = false;
+    playNow('pageLoad');
+  }
+
   function bindGlobal() {
-    document.addEventListener('pointerdown', function () {
+    document.addEventListener('pointerdown', function (e) {
       unlock();
-    }, { passive: true });
+      if (pageLoadPending && !e.target.closest('#menuBtn, #navClose, #feedbackToggle')) {
+        unlock().then(function () { tryPageLoadSound(); });
+      }
+    }, { passive: true, capture: true });
     bindTouchHaptics();
 
     document.addEventListener('click', function (e) {
@@ -618,11 +637,16 @@
       });
     }
 
-    window.addEventListener('rameditz:page-loaded', function () { play('pageLoad'); });
+    window.addEventListener('rameditz:page-loaded', function () {
+      if (isSoundMuted()) return;
+      if (isAudioReady()) playNow('pageLoad');
+      else pageLoadPending = true;
+    });
   }
 
   window.RamEditzFeedback = {
     play: play,
+    playNow: playNow,
     prepare: unlock,
     haptic: haptic,
     vibrate: vibrate,
