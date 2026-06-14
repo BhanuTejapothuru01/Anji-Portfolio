@@ -23,6 +23,7 @@
   var revealCount = 0;
   var lastScrollSound = 0;
   var lastHapticAt = 0;
+  var unlockPromise = null;
 
   var HAPTIC = {
     light: [12],
@@ -69,12 +70,35 @@
     return ctx;
   }
 
+  function warmContext(c) {
+    try {
+      var buffer = c.createBuffer(1, 1, c.sampleRate);
+      var src = c.createBufferSource();
+      src.buffer = buffer;
+      src.connect(c.destination);
+      src.start(0);
+    } catch (e) { /* warm-up optional */ }
+  }
+
   function unlock() {
-    if (unlocked) return;
     var c = initContext();
-    if (!c) return;
-    if (c.state === 'suspended') c.resume();
-    unlocked = true;
+    if (!c) return Promise.resolve(false);
+    if (unlocked && c.state === 'running') return Promise.resolve(true);
+
+    if (!unlockPromise) {
+      unlockPromise = (c.state === 'suspended' ? c.resume() : Promise.resolve())
+        .then(function () {
+          warmContext(c);
+          unlocked = c.state === 'running';
+          return unlocked;
+        })
+        .catch(function () {
+          unlockPromise = null;
+          return false;
+        });
+    }
+
+    return unlockPromise;
   }
 
   function prefersReducedMotion() {
@@ -206,16 +230,16 @@
       vibrate('light');
     },
     menuOpen: function () {
-      sweep(120, 680, 0.35, 0.05);
-      noiseBurst(0.12, 0.035, 0.08);
-      tone(220, 0.2, 'sine', 0.04, 0.1);
-      tone(330, 0.15, 'triangle', 0.03, 0.15);
+      tone(280, 0.1, 'sine', 0.06, 0);
+      sweep(160, 720, 0.22, 0.04);
+      noiseBurst(0.06, 0.03, 0.03);
+      tone(440, 0.08, 'triangle', 0.03, 0.05);
       vibrate('menuOpen');
     },
     menuClose: function () {
-      sweep(520, 90, 0.22, 0.04);
-      tone(140, 0.1, 'triangle', 0.06);
-      noiseBurst(0.06, 0.02);
+      tone(180, 0.08, 'triangle', 0.06, 0);
+      sweep(480, 100, 0.16, 0.035);
+      noiseBurst(0.04, 0.02, 0.02);
       vibrate('menuClose');
     },
     nav: function () {
@@ -331,18 +355,29 @@
     }
   };
 
-  function play(name, force) {
-    unlock();
-    var hapticName = SOUND_HAPTIC[name];
-    if (!force && isSoundMuted()) {
-      if (hapticName) triggerHaptic(hapticName);
-      return;
-    }
+  function runSound(name, force) {
     if (!SOUNDS[name]) return;
     var wasSoundMuted = soundMuted;
     if (force) soundMuted = false;
     try { SOUNDS[name](); } catch (e) { /* audio blocked */ }
     if (force) soundMuted = wasSoundMuted;
+  }
+
+  function play(name, force) {
+    var hapticName = SOUND_HAPTIC[name];
+    if (!force && isSoundMuted()) {
+      if (hapticName) triggerHaptic(hapticName);
+      return;
+    }
+
+    unlock().then(function (ready) {
+      if (!ready) return;
+      if (!force && isSoundMuted()) {
+        if (hapticName) triggerHaptic(hapticName);
+        return;
+      }
+      runSound(name, force);
+    });
   }
 
   function toggleSound() {
@@ -525,7 +560,9 @@
   }
 
   function bindGlobal() {
-    document.addEventListener('pointerdown', unlock, { passive: true });
+    document.addEventListener('pointerdown', function () {
+      unlock();
+    }, { passive: true });
     bindTouchHaptics();
 
     document.addEventListener('click', function (e) {
@@ -586,6 +623,7 @@
 
   window.RamEditzFeedback = {
     play: play,
+    prepare: unlock,
     haptic: haptic,
     vibrate: vibrate,
     toggleHaptics: toggleHaptics,

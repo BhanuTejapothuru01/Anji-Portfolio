@@ -147,7 +147,12 @@
     if (!silent) fb('menuClose');
   }
 
-  if (menuBtn) menuBtn.addEventListener('click', openNav);
+  if (menuBtn) {
+    menuBtn.addEventListener('pointerdown', function () {
+      if (window.RamEditzFeedback && RamEditzFeedback.prepare) RamEditzFeedback.prepare();
+    }, { passive: true });
+    menuBtn.addEventListener('click', openNav);
+  }
   if (navClose) navClose.addEventListener('click', closeNav);
 
   navLinks.forEach(function (link) {
