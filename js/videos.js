@@ -30,9 +30,9 @@ window.RAM_EDITZ_VIDEOS = {
   /* ── Featured showreel (top of Portfolio page) ── */
   featured: {
     enabled: true,
-    title: 'Ram editz Showreel 2024',
-    url: 'https://www.youtube.com/watch?v=aqz-KE-bpKQ',
-    thumbnail: ''
+    title: 'Video Editing for Social Media',
+    url: 'https://res.cloudinary.com/dekwcqwij/video/upload/v1781455503/portfolio_videos/hgrtpgnkctcqmeweubcy.mp4',
+    thumbnail: 'assets/thumbs/social-media-hero.jpg'
   },
 
   /* ── Portfolio grid — add / remove / edit videos below ── */

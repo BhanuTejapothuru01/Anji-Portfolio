@@ -427,7 +427,7 @@
 
       if (video.url) {
         return (
-          '<div class="featured-card reveal tilt-card" ' +
+          '<div class="featured-card reveal" ' +
             'data-video-url="' + escapeHtml(embed) + '" ' +
             'data-video-title="' + escapeHtml(video.title) + '" ' +
             'role="button" tabindex="0">' +
@@ -437,7 +437,7 @@
       }
 
       return (
-        '<a href="portfolio.html" class="featured-card reveal tilt-card">' +
+        '<a href="portfolio.html" class="featured-card reveal">' +
           cardInner +
         '</a>'
       );

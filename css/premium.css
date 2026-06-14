@@ -555,47 +555,6 @@ body.page-enter {
   .header-cta { display: inline-flex; }
 }
 
-/* Hero premium (optional badge / scroll) */
-.hero-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 16px;
-  margin-bottom: 24px;
-  font-size: 0.7rem;
-  font-weight: 600;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--orange-light);
-  background: var(--premium-glass);
-  border: 1px solid var(--premium-border);
-  border-radius: var(--radius-pill);
-  backdrop-filter: blur(12px);
-}
-
-.hero-badge-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--orange);
-  box-shadow: 0 0 8px var(--orange);
-  animation: pulse 2s ease infinite;
-}
-
-@keyframes pulse {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.6; transform: scale(0.85); }
-}
-
-.hero-subtitle {
-  max-width: 420px;
-  margin-top: 20px;
-  font-size: 1rem;
-  line-height: 1.7;
-  color: var(--gray);
-  font-weight: 400;
-}
-
 /* Marquee */
 .marquee-section {
   position: relative;
@@ -1444,11 +1403,6 @@ body.page-enter {
   }
 }
 
-/* Tilt card */
-.tilt-card {
-  transform-style: preserve-3d;
-}
-
 /* Home section spacing override */
 .home-sections .section-block { position: relative; z-index: 1; }
 
@@ -1488,6 +1442,56 @@ body.page-enter {
 .feedback-toggle.muted .feedback-icon-on { display: none; }
 .feedback-toggle.muted .feedback-icon-off { display: block; }
 .feedback-toggle.muted { opacity: 0.5; }
+
+.feedback-toggle {
+  position: relative;
+}
+
+.feedback-haptic-dot {
+  position: absolute;
+  right: 2px;
+  bottom: 2px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--orange);
+  box-shadow: 0 0 8px rgba(255, 140, 66, 0.65);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.feedback-toggle.haptics-off .feedback-haptic-dot {
+  opacity: 0;
+  transform: scale(0.4);
+}
+
+/* Visual haptic pulse — works on iOS where Vibration API is unavailable */
+@keyframes haptic-pulse {
+  0% { transform: scale(1); }
+  35% { transform: scale(0.96); }
+  100% { transform: scale(1); }
+}
+
+html.haptics-on .btn:active,
+html.haptics-on .filter-btn:active,
+html.haptics-on .menu-btn:active,
+html.haptics-on .nav-close:active,
+html.haptics-on .home-back-btn:active,
+html.haptics-on .feedback-toggle:active,
+html.haptics-on .hero-reel:active,
+html.haptics-on .featured-reel:active,
+html.haptics-on .featured-card:active,
+html.haptics-on .video-thumb:active {
+  transform: scale(0.97);
+  transition: transform 0.12s ease;
+}
+
+.haptic-pulse {
+  animation: haptic-pulse 0.22s ease;
+}
+
+.haptic-toast {
+  z-index: 10003;
+}
 
 /* Nav footer links */
 .nav-footer a {

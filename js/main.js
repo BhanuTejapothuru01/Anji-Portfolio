@@ -295,9 +295,9 @@
 
   if (document.getElementById('videoGrid')) {
     buildPortfolio();
-  } else {
-    bindVideoTriggers();
   }
+
+  window.addEventListener('rameditz:page-loaded', bindVideoTriggers);
 
   /* ---- Budget slider ---- */
   function formatBudget(amount) {

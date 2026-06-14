@@ -204,10 +204,6 @@
   animation: float 14s ease-in-out infinite;
 }
 
-body.motion-active .bg-mesh-blob {
-  animation: none;
-}
-
 /* Static grain — animated grain caused repaint lag */
 .grain-overlay {
   animation: none;

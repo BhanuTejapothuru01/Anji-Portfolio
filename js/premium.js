@@ -270,7 +270,7 @@
 
     mount.innerHTML = config.stats.map(function (stat) {
       return (
-        '<div class="stat-card reveal tilt-card">' +
+        '<div class="stat-card reveal">' +
           '<div class="stat-value" data-count="' + stat.value + '" data-suffix="' + stat.suffix + '">0</div>' +
           '<div class="stat-label">' + stat.label + '</div>' +
         '</div>'
@@ -477,7 +477,7 @@
       var stars = '';
       for (var i = 0; i < (t.rating || 5); i++) stars += '★';
       return (
-        '<article class="testimonial-card reveal tilt-card">' +
+        '<article class="testimonial-card reveal">' +
           '<div class="testimonial-stars">' + stars + '</div>' +
           '<p class="testimonial-quote">"' + escapeHtml(t.quote) + '"</p>' +
           '<div class="testimonial-author">' +
@@ -542,47 +542,6 @@
       '</footer>';
   }
 
-  /* ---- 3D tilt on cards ---- */
-  function initTilt() {
-    if (isTouch || document.documentElement.classList.contains('perf-lite') ||
-        document.documentElement.classList.contains('perf-smooth')) return;
-
-    var tiltPending = false;
-    var tiltTarget = null;
-    var tiltX = 0;
-    var tiltY = 0;
-
-    function applyTilt() {
-      tiltPending = false;
-      if (!tiltTarget) return;
-      tiltTarget.style.transform =
-        'perspective(800px) rotateY(' + tiltX + 'deg) rotateX(' + tiltY + 'deg) translateY(-4px)';
-    }
-
-    document.querySelectorAll('.tilt-card').forEach(function (card) {
-      if (card.dataset.tiltBound) return;
-      card.dataset.tiltBound = '1';
-
-      card.addEventListener('mousemove', function (e) {
-        var rect = card.getBoundingClientRect();
-        var x = (e.clientX - rect.left) / rect.width - 0.5;
-        var y = (e.clientY - rect.top) / rect.height - 0.5;
-        tiltX = x * 8;
-        tiltY = -y * 8;
-        tiltTarget = card;
-        if (!tiltPending) {
-          tiltPending = true;
-          requestAnimationFrame(applyTilt);
-        }
-      });
-
-      card.addEventListener('mouseleave', function () {
-        if (tiltTarget === card) tiltTarget = null;
-        card.style.transform = '';
-      });
-    });
-  }
-
   /* ---- Init ---- */
   buildMarquee();
   buildHeroSection();
@@ -590,7 +549,6 @@
   buildFeaturedPreview();
   buildTestimonials();
   buildFooter();
-  initTilt();
 
   var contactEmail = document.getElementById('contactEmail');
   var contactPhone = document.getElementById('contactPhone');
