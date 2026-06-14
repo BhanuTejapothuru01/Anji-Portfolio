@@ -128,5 +128,6 @@
     clearInterval(statusInterval);
     setProgress(100);
     if (statusEl) statusEl.textContent = 'Ready';
+    window.dispatchEvent(new CustomEvent('rameditz:loader-complete'));
   });
 })();

@@ -305,9 +305,9 @@
       vibrate('selection');
     },
     pageLoad: function () {
-      sweep(90, 320, 0.4, 0.035);
-      chord([196, 247, 294], 0.35, 'sine', 0.05, 0.08);
-      noiseBurst(0.15, 0.02, 0.2, 500);
+      tone(196, 0.16, 'sine', 0.07, 0, true);
+      tone(247, 0.14, 'sine', 0.06, 0.025, true);
+      tone(294, 0.2, 'sine', 0.06, 0.05, true);
       vibrate('light');
     },
     reveal: function () {
@@ -567,20 +567,34 @@
     }, { passive: true });
   }
 
-  var pageLoadPending = false;
+  var pageReady = false;
+  var pageLoadPlayed = false;
 
-  function tryPageLoadSound() {
-    if (!pageLoadPending || isSoundMuted()) return;
-    pageLoadPending = false;
-    playNow('pageLoad');
+  function tryPlayPageLoad() {
+    if (!pageReady || pageLoadPlayed || isSoundMuted()) return;
+    if (!isAudioReady()) return;
+    pageLoadPlayed = true;
+    runSound('pageLoad');
+  }
+
+  function markPageReady() {
+    pageReady = true;
+    tryPlayPageLoad();
+    if (!pageLoadPlayed && !isSoundMuted()) {
+      unlock().then(function (ready) {
+        if (ready) tryPlayPageLoad();
+      });
+    }
+  }
+
+  function bindPageLoadSound() {
+    window.addEventListener('rameditz:loader-complete', markPageReady);
+    window.addEventListener('rameditz:page-loaded', markPageReady);
   }
 
   function bindGlobal() {
-    document.addEventListener('pointerdown', function (e) {
-      unlock();
-      if (pageLoadPending && !e.target.closest('#menuBtn, #navClose, #feedbackToggle')) {
-        unlock().then(function () { tryPageLoadSound(); });
-      }
+    document.addEventListener('pointerdown', function () {
+      unlock().then(function () { tryPlayPageLoad(); });
     }, { passive: true, capture: true });
     bindTouchHaptics();
 
@@ -637,17 +651,13 @@
       });
     }
 
-    window.addEventListener('rameditz:page-loaded', function () {
-      if (isSoundMuted()) return;
-      if (isAudioReady()) playNow('pageLoad');
-      else pageLoadPending = true;
-    });
   }
 
   window.RamEditzFeedback = {
     play: play,
     playNow: playNow,
     prepare: unlock,
+    tryPageLoad: tryPlayPageLoad,
     haptic: haptic,
     vibrate: vibrate,
     toggleHaptics: toggleHaptics,
@@ -656,9 +666,11 @@
   };
 
   function init() {
+    initContext();
     document.documentElement.classList.toggle('haptics-on', !isHapticDisabled());
     document.documentElement.classList.toggle('touch-device', isTouch);
     injectToggle();
+    bindPageLoadSound();
     bindGlobal();
     bindScrollSounds();
     bindRevealSounds();
