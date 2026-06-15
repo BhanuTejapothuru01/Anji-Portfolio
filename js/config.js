@@ -1,7 +1,6 @@
 /** Site configuration — edit these values to customize your portfolio */
 var config = {
   siteName: 'Ram editz',
-  designStudio: 'Kyle Studios',
   logoLine1: 'Ram',
   logoLine2: 'editz',
   tagline: 'We Make Brands Move',

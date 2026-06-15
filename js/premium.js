@@ -510,7 +510,6 @@
     var line1 = config.logoLine1 || 'Ram';
     var line2 = config.logoLine2 || 'editz';
     var site = config.siteName || 'Ram editz';
-    var designStudio = config.designStudio || 'Kyle Studios';
 
     mount.innerHTML =
       '<footer class="footer-premium">' +
@@ -545,7 +544,6 @@
         '</div>' +
         '<div class="footer-bottom">' +
           '<span>&copy; ' + year + ' ' + escapeHtml(site) + '. All rights reserved.</span>' +
-          '<span>Design by ' + escapeHtml(designStudio) + '</span>' +
         '</div>' +
       '</footer>';
   }
