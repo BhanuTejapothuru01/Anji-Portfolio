@@ -33,8 +33,20 @@
     if (/\/video\/upload\/[^/]*q_auto/.test(url)) return url;
 
     var lite = document.documentElement.classList.contains('perf-lite');
-    var transforms = lite ? 'q_auto:eco,f_auto,w_960,c_limit' : 'q_auto,f_auto,w_1920,c_limit';
+    var conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+    var slow = conn && (conn.saveData || /2g|3g|slow-2g/.test(conn.effectiveType || ''));
+    var transforms = (lite || slow)
+      ? 'q_auto:low,f_auto,w_640,c_limit'
+      : 'q_auto,f_auto,w_1280,c_limit';
     return url.replace('/video/upload/', '/video/upload/' + transforms + '/');
+  }
+
+  function buildPosterImgHtml(thumb, className, alt) {
+    if (!thumb) return '';
+    return (
+      '<img class="' + className + '" src="' + escapeHtml(thumb) + '" alt="' + escapeHtml(alt || '') + '" ' +
+      'loading="lazy" decoding="async" aria-hidden="true">'
+    );
   }
 
   function toEmbedUrl(url) {
@@ -80,13 +92,6 @@
     var streamUrl = getStreamUrl(video.url);
     var poster = getThumbnail(video);
     var posterAttr = poster ? ' poster="' + escapeHtml(poster) + '"' : '';
-    var isPrimary = className === 'hero-reel-bg-video' || className === 'featured-reel-bg-video';
-    if (isPrimary) {
-      return (
-        '<video class="' + className + '" src="' + escapeHtml(streamUrl) + '"' +
-        posterAttr + ' muted loop playsinline preload="metadata" aria-hidden="true"></video>'
-      );
-    }
     return (
       '<video class="' + className + '" data-src="' + escapeHtml(streamUrl) + '"' +
       posterAttr + ' muted loop playsinline preload="none" aria-hidden="true"></video>'
@@ -98,13 +103,13 @@
     var hasUrl = !!video.url;
     var inner = '';
 
-    if (hasUrl && isDirectVideo(video.url)) {
+    if (thumb) {
+      inner +=
+        '<img class="video-thumb-img" src="' + escapeHtml(thumb) + '" alt="' + escapeHtml(video.title) + ' thumbnail" loading="lazy" decoding="async">' +
+        '<div class="video-thumb-overlay"></div>';
+    } else if (hasUrl && isDirectVideo(video.url)) {
       inner +=
         buildBgVideoHtml(video, 'video-thumb-bg-video') +
-        '<div class="video-thumb-overlay"></div>';
-    } else if (thumb) {
-      inner +=
-        '<img class="video-thumb-img" src="' + escapeHtml(thumb) + '" alt="' + escapeHtml(video.title) + ' thumbnail" loading="lazy">' +
         '<div class="video-thumb-overlay"></div>';
     }
 
@@ -148,7 +153,7 @@
     var thumb = getThumbnail(featured);
     var hasUrl = !!featured.url;
     var hasBgVideo = hasUrl && isDirectVideo(featured.url);
-    var thumbStyle = (!hasBgVideo && thumb) ? ' style="background-image:url(' + thumb + ')"' : '';
+    var thumbStyle = thumb ? ' style="background-image:url(' + escapeHtml(thumb) + ')"' : '';
     var reelClass = 'featured-reel featured-reel-hud reveal' +
       (hasBgVideo ? ' has-bg-video' : (thumb ? ' has-thumbnail' : ''));
 
@@ -224,7 +229,7 @@
     var thumb = getThumbnail(featured);
     var hasUrl = !!featured.url;
     var hasBgVideo = hasUrl && isDirectVideo(featured.url);
-    var thumbStyle = (!hasBgVideo && thumb) ? ' style="background-image:url(' + escapeHtml(thumb) + ')"' : '';
+    var thumbStyle = thumb ? ' style="background-image:url(' + escapeHtml(thumb) + ')"' : '';
     var reelClass = 'hero-reel' + (hasBgVideo ? ' has-bg-video' : (thumb ? ' has-thumbnail' : ''));
 
     return (
@@ -306,7 +311,21 @@
     if (!bgVideos.length) return;
 
     var activeSecondary = 0;
-    var MAX_SECONDARY = 2;
+    var MAX_SECONDARY = document.documentElement.classList.contains('perf-lite') ? 0 : 1;
+    var pageReady = document.body.classList.contains('is-loading') === false;
+
+    window.addEventListener('rameditz:page-loaded', function () {
+      pageReady = true;
+      bgVideos.forEach(function (videoEl) {
+        if (!isPrimaryReel(videoEl)) return;
+        var root = videoEl.closest('.hero-reel') || videoEl.closest('.featured-reel');
+        if (!root) return;
+        var rect = root.getBoundingClientRect();
+        if (rect.bottom > 0 && rect.top < window.innerHeight) {
+          setVisible(videoEl, true);
+        }
+      });
+    }, { once: true });
 
     function isPrimaryReel(videoEl) {
       return videoEl.classList.contains('hero-reel-bg-video') ||
@@ -365,6 +384,7 @@
     }
 
     function setVisible(videoEl, visible) {
+      if (visible && isPrimaryReel(videoEl) && !pageReady) return;
       videoEl.dataset.bgVisible = visible ? '1' : '0';
       if (visible) {
         warmBuffer(videoEl);
@@ -465,7 +485,9 @@
     mount.innerHTML = videos.map(function (video, i) {
       var embed = toEmbedUrl(video.url);
       var cardInner =
-        buildBgVideoHtml(video, 'featured-card-bg-video') +
+        (getThumbnail(video)
+          ? buildPosterImgHtml(getThumbnail(video), 'featured-card-bg-video', video.title)
+          : buildBgVideoHtml(video, 'featured-card-bg-video')) +
         '<div class="featured-card-overlay" aria-hidden="true"></div>' +
         '<div class="featured-card-inner">' +
           '<span class="featured-card-num">0' + (i + 1) + '</span>' +

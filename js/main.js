@@ -92,13 +92,14 @@
   function finishLoading() {
     if (loaderDone) return;
     loaderDone = true;
+    sessionStorage.setItem('ram-editz-visited', '1');
     if (pageLoader) {
       pageLoader.classList.add('loader-exit');
       document.body.classList.remove('is-loading');
       window.dispatchEvent(new CustomEvent('rameditz:page-loaded'));
       setTimeout(function () {
         pageLoader.classList.add('hidden');
-      }, reducedMotion ? 120 : 320);
+      }, reducedMotion ? 80 : 220);
     } else {
       document.body.classList.remove('is-loading');
       window.dispatchEvent(new CustomEvent('rameditz:page-loaded'));
@@ -106,8 +107,7 @@
   }
 
   function scheduleLoaderExit() {
-    var delay = reducedMotion ? 0 : 100;
-    setTimeout(finishLoading, delay);
+    finishLoading();
   }
 
   if (document.readyState === 'loading') {

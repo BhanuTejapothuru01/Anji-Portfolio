@@ -6,6 +6,17 @@
 
   var loader = document.getElementById('pageLoader');
   if (!loader || loader.dataset.loaderBuilt) return;
+
+  if (sessionStorage.getItem('ram-editz-visited') === '1') {
+    loader.classList.add('hidden');
+    document.body.classList.remove('is-loading');
+    loader.dataset.loaderBuilt = '1';
+    requestAnimationFrame(function () {
+      window.dispatchEvent(new CustomEvent('rameditz:loader-complete'));
+    });
+    return;
+  }
+
   loader.dataset.loaderBuilt = '1';
 
   var config = window.RAM_EDITZ_CONFIG || {};
