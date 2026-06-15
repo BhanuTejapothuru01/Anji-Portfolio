@@ -20,12 +20,6 @@ body.is-loading .grain-overlay {
   opacity: 0;
 }
 
-body.is-loading main,
-body.is-loading .header,
-body.is-loading .bg-effects {
-  visibility: hidden;
-}
-
 .page-loader.hidden {
   opacity: 0;
   visibility: hidden;
@@ -51,11 +45,11 @@ body.is-loading .bg-effects {
 }
 
 .page-loader.loader-exit {
-  transition: opacity 0.9s var(--ease-premium, ease), visibility 0.9s ease, transform 1s var(--ease-premium, ease);
+  transition: opacity 0.45s var(--ease-premium, ease), visibility 0.45s ease, transform 0.5s var(--ease-premium, ease);
 }
 
 .page-loader.loader-exit .loader-inner {
-  animation: loaderExit 0.85s var(--ease-premium, ease) forwards;
+  animation: loaderExit 0.4s var(--ease-premium, ease) forwards;
 }
 
 @keyframes loaderBgPulse {

@@ -123,7 +123,7 @@
 
   var statusInterval = setInterval(cycleStatus, 1800);
 
-  window.addEventListener('load', function () {
+  window.addEventListener('DOMContentLoaded', function () {
     clearInterval(interval);
     clearInterval(statusInterval);
     setProgress(100);

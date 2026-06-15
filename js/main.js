@@ -87,21 +87,37 @@
     else el.classList.add('revealed');
   };
 
+  var loaderDone = false;
+
+  function finishLoading() {
+    if (loaderDone) return;
+    loaderDone = true;
+    if (pageLoader) {
+      pageLoader.classList.add('loader-exit');
+      document.body.classList.remove('is-loading');
+      window.dispatchEvent(new CustomEvent('rameditz:page-loaded'));
+      setTimeout(function () {
+        pageLoader.classList.add('hidden');
+      }, reducedMotion ? 120 : 320);
+    } else {
+      document.body.classList.remove('is-loading');
+      window.dispatchEvent(new CustomEvent('rameditz:page-loaded'));
+    }
+  }
+
+  function scheduleLoaderExit() {
+    var delay = reducedMotion ? 0 : 100;
+    setTimeout(finishLoading, delay);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', scheduleLoaderExit);
+  } else {
+    scheduleLoaderExit();
+  }
+
   window.addEventListener('load', function () {
-    var delay = reducedMotion ? 80 : 350;
-    setTimeout(function () {
-      if (pageLoader) {
-        pageLoader.classList.add('loader-exit');
-        document.body.classList.remove('is-loading');
-        window.dispatchEvent(new CustomEvent('rameditz:page-loaded'));
-        setTimeout(function () {
-          pageLoader.classList.add('hidden');
-        }, reducedMotion ? 150 : 450);
-      } else {
-        document.body.classList.remove('is-loading');
-        window.dispatchEvent(new CustomEvent('rameditz:page-loaded'));
-      }
-    }, delay);
+    if (!loaderDone) finishLoading();
   });
 
   /* ---- Header scroll effect ---- */

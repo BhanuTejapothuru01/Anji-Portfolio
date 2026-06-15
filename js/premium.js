@@ -217,7 +217,15 @@
     });
   }
 
-  initFilmCursor();
+  function deferAfterLoad(fn) {
+    if ('requestIdleCallback' in window) {
+      requestIdleCallback(fn, { timeout: 1500 });
+    } else {
+      window.addEventListener('rameditz:page-loaded', fn, { once: true });
+    }
+  }
+
+  deferAfterLoad(initFilmCursor);
 
   /* ---- Animated counters ---- */
   function animateCounters() {
@@ -318,7 +326,7 @@
       });
     }
 
-    initHeroLetterHover();
+    deferAfterLoad(initHeroLetterHover);
   }
 
   /* ---- Hero title — cursor-proximity letter hover ---- */

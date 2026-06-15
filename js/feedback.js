@@ -672,9 +672,11 @@
     injectToggle();
     bindPageLoadSound();
     bindGlobal();
-    bindScrollSounds();
-    bindRevealSounds();
-    bindCounterSounds();
+    window.addEventListener('rameditz:page-loaded', function () {
+      bindScrollSounds();
+      bindRevealSounds();
+      bindCounterSounds();
+    }, { once: true });
   }
 
   if (document.readyState === 'loading') {

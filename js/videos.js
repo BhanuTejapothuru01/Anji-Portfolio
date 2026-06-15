@@ -15,6 +15,7 @@
  *   YouTube:  https://youtu.be/VIDEO_ID
  *   YouTube:  https://www.youtube.com/embed/VIDEO_ID
  *   MP4 file: videos/my-reel.mp4  (put file in /videos folder)
+ *   Cloudinary: paste your upload URL as-is — q_auto / f_auto is applied automatically
  *   Vimeo:    https://vimeo.com/123456789
  *
  * THUMBNAIL (optional):
