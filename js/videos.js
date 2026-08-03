@@ -83,5 +83,40 @@ window.RAM_EDITZ_VIDEOS = {
       url: 'https://res.cloudinary.com/dekwcqwij/video/upload/v1781416416/portfolio_videos/r5njpp8kukmoxl6fjp4c.mp4',
       thumbnail: 'assets/thumbs/aarva-ad.jpg'
     }
+    {
+  id: 'the-real-conversation',
+  enabled: true,
+  title: 'The Real Conversation',
+  category: 'NARRATIVE',
+  url: 'https://res.cloudinary.com/dekwcqwij/video/upload/portfolio_videos/tmw384m273nusccfwsqz.mp4',
+  thumbnail: ''
+},
+
+{
+  id: 'behind-the-story',
+  enabled: true,
+  title: 'Behind the Story',
+  category: 'NARRATIVE',
+  url: 'https://res.cloudinary.com/dekwcqwij/video/upload/portfolio_videos/lt2om24yquik20sxjeu6.mp4',
+  thumbnail: ''
+},
+
+{
+  id: 'voices-that-matter',
+  enabled: true,
+  title: 'Voices That Matter',
+  category: 'NARRATIVE',
+  url: 'https://res.cloudinary.com/dekwcqwij/video/upload/portfolio_videos/rcbke5hit5adq0faocy3.mp4',
+  thumbnail: ''
+},
+
+{
+  id: 'the-next-chapter',
+  enabled: true,
+  title: 'The Next Chapter',
+  category: 'NARRATIVE',
+  url: 'https://res.cloudinary.com/dekwcqwij/video/upload/portfolio_videos/iot1lqob912wrkvb0yfh.mp4',
+  thumbnail: ''
+}
   ]
 };
