@@ -82,7 +82,7 @@ window.RAM_EDITZ_VIDEOS = {
       category: 'COMMERCIAL',
       url: 'https://res.cloudinary.com/dekwcqwij/video/upload/v1781416416/portfolio_videos/r5njpp8kukmoxl6fjp4c.mp4',
       thumbnail: 'assets/thumbs/aarva-ad.jpg'
-    }
+    },
     {
   id: 'the-real-conversation',
   enabled: true,
