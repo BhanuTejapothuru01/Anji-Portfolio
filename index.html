@@ -1,35 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 
-  <meta name="description" content="Ram editz — Cinematic video production. Brand reels, commercials, music videos, and social content that makes brands move.">
+  <meta name="description"
+    content="Ram editz — Cinematic video production. Brand reels, commercials, music videos, and social content that makes brands move.">
+
   <meta name="theme-color" content="#0a0a0c">
 
   <meta property="og:title" content="Ram editz — We Make Brands Move">
-  <meta property="og:description" content="Cinematic video production for brands that demand attention.">
+  <meta property="og:description"
+    content="Cinematic video production for brands that demand attention.">
   <meta property="og:type" content="website">
 
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎬</text></svg>">
+  <link rel="icon"
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎬</text></svg>">
 
-  <link rel="preload" as="image" href="assets/thumbs/social-media-hero.jpg">
+  <link rel="preload"
+    as="image"
+    href="assets/thumbs/social-media-hero.jpg">
 
-  <link
-    rel="preload"
+  <link rel="preload"
     as="font"
     type="font/ttf"
     href="assets/fonts/inter-v20-UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuLyfMZg.ttf"
-    crossorigin
-  >
+    crossorigin>
 
-  <link
-    rel="preload"
+  <link rel="preload"
     as="font"
     type="font/ttf"
     href="assets/fonts/syne-v24-8vIS7w4qzmVxsWxjBZRjr0FKM_24vj6k.ttf"
-    crossorigin
-  >
+    crossorigin>
 
   <title>Ram editz — We Make Brands Move</title>
 
@@ -39,15 +42,86 @@
   <link rel="stylesheet" href="css/background-animations.css">
   <link rel="stylesheet" href="css/loader.css">
   <link rel="stylesheet" href="css/responsive.css">
+
+  <!-- Homepage video styling -->
+  <style>
+    .featured-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 24px;
+      width: 100%;
+    }
+
+    .home-video-card {
+      position: relative;
+      width: 100%;
+      overflow: hidden;
+      border-radius: 12px;
+      background: #111;
+    }
+
+    .home-video-wrapper {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      overflow: hidden;
+      background: #000;
+      border-radius: 12px;
+    }
+
+    .home-video-wrapper iframe {
+      width: 100%;
+      height: 100%;
+      border: 0;
+      display: block;
+    }
+
+    .home-video-info {
+      padding: 18px 4px 8px;
+    }
+
+    .home-video-category {
+      display: block;
+      font-size: 11px;
+      letter-spacing: 2px;
+      opacity: 0.6;
+      margin-bottom: 8px;
+    }
+
+    .home-video-title {
+      margin: 0;
+      font-size: 20px;
+      line-height: 1.2;
+    }
+
+    @media (max-width: 900px) {
+      .featured-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 600px) {
+      .featured-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+
 </head>
+
 
 <body data-page="home" class="is-loading">
 
+  <!-- GRAIN -->
   <div class="grain-overlay" aria-hidden="true"></div>
 
+  <!-- LOADER -->
   <div class="page-loader" id="pageLoader"></div>
 
+
+  <!-- BACKGROUND -->
   <div class="bg-effects" aria-hidden="true">
+
     <div class="bokeh bokeh-1"></div>
     <div class="bokeh bokeh-2"></div>
     <div class="bokeh bokeh-3"></div>
@@ -56,6 +130,7 @@
 
     <div class="glass-corner glass-corner-tl"></div>
     <div class="glass-corner glass-corner-br"></div>
+
   </div>
 
 
@@ -75,11 +150,12 @@
       class="menu-btn"
       id="menuBtn"
       aria-label="Open menu"
-      aria-expanded="false"
-    >
+      aria-expanded="false">
+
       <span></span>
       <span></span>
       <span></span>
+
     </button>
 
   </header>
@@ -89,8 +165,7 @@
   <nav
     class="nav-overlay"
     id="navOverlay"
-    aria-hidden="true"
-  >
+    aria-hidden="true">
 
     <div class="nav-overlay-bg">
 
@@ -98,40 +173,35 @@
         class="nav-reel-wireframe"
         viewBox="0 0 400 400"
         fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-      >
+        xmlns="http://www.w3.org/2000/svg">
 
         <circle
           cx="200"
           cy="200"
           r="120"
           stroke="rgba(255,255,255,0.08)"
-          stroke-width="2"
-        />
+          stroke-width="2"/>
 
         <circle
           cx="200"
           cy="200"
           r="90"
           stroke="rgba(255,255,255,0.06)"
-          stroke-width="1.5"
-        />
+          stroke-width="1.5"/>
 
         <circle
           cx="200"
           cy="200"
           r="60"
           stroke="rgba(255,255,255,0.05)"
-          stroke-width="1"
-        />
+          stroke-width="1"/>
 
         <circle
           cx="200"
           cy="200"
           r="25"
           stroke="rgba(255,255,255,0.1)"
-          stroke-width="1.5"
-        />
+          stroke-width="1.5"/>
 
         <line
           x1="200"
@@ -139,8 +209,7 @@
           x2="200"
           y2="320"
           stroke="rgba(255,255,255,0.04)"
-          stroke-width="1"
-        />
+          stroke-width="1"/>
 
         <line
           x1="80"
@@ -148,8 +217,7 @@
           x2="320"
           y2="200"
           stroke="rgba(255,255,255,0.04)"
-          stroke-width="1"
-        />
+          stroke-width="1"/>
 
         <rect
           x="140"
@@ -159,15 +227,13 @@
           rx="8"
           stroke="rgba(255,255,255,0.06)"
           stroke-width="1"
-          transform="rotate(45 200 200)"
-        />
+          transform="rotate(45 200 200)"/>
 
         <path
           d="M200 80 Q280 120 320 200 Q280 280 200 320 Q120 280 80 200 Q120 120 200 80"
           stroke="rgba(255,140,66,0.15)"
           stroke-width="1"
-          fill="none"
-        />
+          fill="none"/>
 
       </svg>
 
@@ -177,8 +243,7 @@
     <button
       class="nav-close"
       id="navClose"
-      aria-label="Close menu"
-    >
+      aria-label="Close menu">
       &times;
     </button>
 
@@ -189,8 +254,7 @@
         <a
           href="index.html"
           class="nav-link"
-          data-page="home"
-        >
+          data-page="home">
           HOME
         </a>
       </li>
@@ -199,8 +263,7 @@
         <a
           href="portfolio.html"
           class="nav-link"
-          data-page="portfolio"
-        >
+          data-page="portfolio">
           PORTFOLIO
         </a>
       </li>
@@ -209,8 +272,7 @@
         <a
           href="services.html"
           class="nav-link"
-          data-page="services"
-        >
+          data-page="services">
           SERVICES
         </a>
       </li>
@@ -219,8 +281,7 @@
         <a
           href="process.html"
           class="nav-link"
-          data-page="process"
-        >
+          data-page="process">
           PROCESS
         </a>
       </li>
@@ -229,8 +290,7 @@
         <a
           href="contact.html"
           class="nav-link"
-          data-page="contact"
-        >
+          data-page="contact">
           CONTACT
         </a>
       </li>
@@ -260,10 +320,10 @@
               Award-Winning Editor
             </div>
 
+
             <h1
               class="hero-title"
-              aria-label="We Make Brands Move"
-            >
+              aria-label="We Make Brands Move">
 
               <span class="hero-line hero-line-1">
 
@@ -290,10 +350,11 @@
 
               </span>
 
+
               <span
                 class="hero-title-accent-line"
-                aria-hidden="true"
-              ></span>
+                aria-hidden="true">
+              </span>
 
             </h1>
 
@@ -312,27 +373,25 @@
 
               <div
                 class="hero-visual-glow"
-                aria-hidden="true"
-              ></div>
+                aria-hidden="true">
+              </div>
 
               <div
                 class="hero-frame-ring"
-                aria-hidden="true"
-              ></div>
+                aria-hidden="true">
+              </div>
 
               <div id="heroReelMount"></div>
 
               <div
                 class="hero-float-card hero-float-card-1"
-                aria-hidden="true"
-              >
+                aria-hidden="true">
                 4K · Cinema Grade
               </div>
 
               <div
                 class="hero-float-card hero-float-card-2"
-                aria-hidden="true"
-              >
+                aria-hidden="true">
                 Award Winning
               </div>
 
@@ -343,22 +402,21 @@
 
               <div
                 class="hero-tags"
-                id="heroTagsMount"
-              ></div>
+                id="heroTagsMount">
+              </div>
+
 
               <div class="hero-cta">
 
                 <a
                   href="portfolio.html"
-                  class="btn btn-primary"
-                >
+                  class="btn btn-primary">
                   View Our Work
                 </a>
 
                 <a
                   href="contact.html"
-                  class="btn btn-outline"
-                >
+                  class="btn btn-outline">
                   Start a Project
                 </a>
 
@@ -367,8 +425,8 @@
 
               <div
                 class="hero-mini-stats"
-                id="heroStatsMount"
-              ></div>
+                id="heroStatsMount">
+              </div>
 
 
               <div class="hero-scroll">
@@ -390,11 +448,10 @@
     </section>
 
 
-    <!-- SERVICES MARQUEE -->
+    <!-- SERVICES -->
     <section
       class="marquee-section section-block"
-      aria-label="Our services"
-    >
+      aria-label="Our services">
 
       <p class="marquee-label">
         Our Services
@@ -423,8 +480,8 @@
 
       <div
         class="stats-grid"
-        id="statsMount"
-      ></div>
+        id="statsMount">
+      </div>
 
     </section>
 
@@ -450,36 +507,34 @@
       </div>
 
 
-      <!-- NEW VIDEOS -->
+      <!-- NEW VIDEOS DIRECTLY IN INDEX.HTML -->
       <div
         class="featured-grid"
-        id="featuredMount"
-      >
+        id="featuredMount">
 
 
         <!-- VIDEO 1 -->
-        <article class="video-card reveal">
+        <article class="home-video-card reveal">
 
-          <div class="video-card-media">
+          <div class="home-video-wrapper">
 
-            <video
-              controls
-              playsinline
-              preload="metadata"
-              src="https://res.cloudinary.com/dekwcqwij/video/upload/portfolio_videos/tmw384m273nusccfwsqz.mp4"
-            >
-              Your browser does not support the video tag.
-            </video>
+            <iframe
+              src="https://player.cloudinary.com/embed/?cloud_name=dekwcqwij&public_id=portfolio_videos%2Ftmw384m273nusccfwsqz"
+              title="The Real Conversation"
+              allow="autoplay; fullscreen; encrypted-media; picture-in-picture"
+              allowfullscreen>
+            </iframe>
 
           </div>
 
-          <div class="video-card-info">
 
-            <span class="video-category">
+          <div class="home-video-info">
+
+            <span class="home-video-category">
               NARRATIVE
             </span>
 
-            <h3>
+            <h3 class="home-video-title">
               The Real Conversation
             </h3>
 
@@ -489,28 +544,27 @@
 
 
         <!-- VIDEO 2 -->
-        <article class="video-card reveal">
+        <article class="home-video-card reveal">
 
-          <div class="video-card-media">
+          <div class="home-video-wrapper">
 
-            <video
-              controls
-              playsinline
-              preload="metadata"
-              src="https://res.cloudinary.com/dekwcqwij/video/upload/portfolio_videos/lt2om24yquik20sxjeu6.mp4"
-            >
-              Your browser does not support the video tag.
-            </video>
+            <iframe
+              src="https://player.cloudinary.com/embed/?cloud_name=dekwcqwij&public_id=portfolio_videos%2Flt2om24yquik20sxjeu6"
+              title="Behind the Story"
+              allow="autoplay; fullscreen; encrypted-media; picture-in-picture"
+              allowfullscreen>
+            </iframe>
 
           </div>
 
-          <div class="video-card-info">
 
-            <span class="video-category">
+          <div class="home-video-info">
+
+            <span class="home-video-category">
               NARRATIVE
             </span>
 
-            <h3>
+            <h3 class="home-video-title">
               Behind the Story
             </h3>
 
@@ -520,28 +574,27 @@
 
 
         <!-- VIDEO 3 -->
-        <article class="video-card reveal">
+        <article class="home-video-card reveal">
 
-          <div class="video-card-media">
+          <div class="home-video-wrapper">
 
-            <video
-              controls
-              playsinline
-              preload="metadata"
-              src="https://res.cloudinary.com/dekwcqwij/video/upload/portfolio_videos/rcbke5hit5adq0faocy3.mp4"
-            >
-              Your browser does not support the video tag.
-            </video>
+            <iframe
+              src="https://player.cloudinary.com/embed/?cloud_name=dekwcqwij&public_id=portfolio_videos%2Frcbke5hit5adq0faocy3"
+              title="Voices That Matter"
+              allow="autoplay; fullscreen; encrypted-media; picture-in-picture"
+              allowfullscreen>
+            </iframe>
 
           </div>
 
-          <div class="video-card-info">
 
-            <span class="video-category">
+          <div class="home-video-info">
+
+            <span class="home-video-category">
               NARRATIVE
             </span>
 
-            <h3>
+            <h3 class="home-video-title">
               Voices That Matter
             </h3>
 
@@ -555,13 +608,11 @@
 
       <div
         style="text-align:center;margin-top:40px"
-        class="reveal"
-      >
+        class="reveal">
 
         <a
           href="portfolio.html"
-          class="btn btn-outline"
-        >
+          class="btn btn-outline">
           View Full Portfolio
         </a>
 
@@ -588,8 +639,8 @@
 
       <div
         class="testimonials-grid"
-        id="testimonialsMount"
-      ></div>
+        id="testimonialsMount">
+      </div>
 
     </section>
 
@@ -609,19 +660,18 @@
             Let's turn your vision into a cinematic experience that moves your audience.
           </p>
 
+
           <div class="cta-band-actions">
 
             <a
               href="contact.html"
-              class="btn btn-primary"
-            >
+              class="btn btn-primary">
               Start Your Project
             </a>
 
             <a
               href="services.html"
-              class="btn btn-outline"
-            >
+              class="btn btn-outline">
               Explore Services
             </a>
 
@@ -632,7 +682,6 @@
       </div>
 
     </section>
-
 
   </main>
 
@@ -647,43 +696,46 @@
     id="videoModal"
     aria-hidden="true"
     role="dialog"
-    aria-label="Video player"
-  >
+    aria-label="Video player">
 
     <div
       class="video-modal-backdrop"
-      id="videoModalBackdrop"
-    ></div>
+      id="videoModalBackdrop">
+    </div>
+
 
     <div class="video-modal-content">
 
       <button
         class="video-modal-close"
         id="videoModalClose"
-        aria-label="Close video"
-      >
+        aria-label="Close video">
         &times;
       </button>
 
+
       <h3
         class="video-modal-title"
-        id="videoModalTitle"
-      ></h3>
+        id="videoModalTitle">
+      </h3>
+
 
       <div
         class="video-modal-player"
-        id="videoModalPlayer"
-      ></div>
+        id="videoModalPlayer">
+      </div>
 
     </div>
 
   </div>
 
 
-  <!-- SCRIPTS -->
+  <!-- JAVASCRIPT -->
 
-  <!-- videos.js removed from homepage
-       so old portfolio videos don't replace the new videos -->
+  <!-- IMPORTANT:
+       videos.js is intentionally NOT loaded here.
+       This prevents the old videos from replacing the new homepage videos.
+  -->
 
   <script src="js/config.js"></script>
 
@@ -698,6 +750,7 @@
   <script src="js/premium.js"></script>
 
   <script src="js/background-effects.js"></script>
+
 
 </body>
 </html>
